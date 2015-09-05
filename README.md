@@ -1,7 +1,6 @@
 # Django-Blog-Python-Learning-v.2
 [ Coming Soon ] Django Blog Python Learning v.2
 
-
 <h3> Feature:</h3>
 - face 90% bootstrap.
 - admin post, page, author, tags & gallery dan files.
@@ -16,6 +15,18 @@
 - disqus comments.
 - widget all tags & recent posts.
 - much more...
+
+<h3>Requirements:</h3>
+- Python 2.7.8
+- Django==1.8.2
+- Markdown==2.6.2
+- Pillow==2.8.2
+- argparse==1.2.1
+- django-disqus==0.5
+- django-markdown==0.8.4
+- mock==1.0.1
+- psycopg2==2.6.1
+- wsgiref==0.1.2
 
 <h3>Screenshoot:</h3>
 <img src="https://scontent-sin1-1.xx.fbcdn.net/hphotos-xlf1/v/t1.0-9/11986960_1028630287170020_1518907652887844598_n.jpg?oh=d6202af01555ddad9e878a506d460751&oe=5663098F"/>
