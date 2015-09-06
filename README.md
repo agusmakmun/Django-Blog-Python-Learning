@@ -1,5 +1,5 @@
 # Django-Blog-Python-Learning-v.2
-[ Coming Soon ] Django Blog Python Learning v.2
+Django Blog Python Learning v.2
 
 <h3> Feature:</h3>
 - face 90% bootstrap.
