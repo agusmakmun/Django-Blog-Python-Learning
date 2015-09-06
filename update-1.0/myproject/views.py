@@ -25,13 +25,6 @@ def resource(request):
         'title':'Resource - Python Learning'
         })
 
-"""
-def contact(request):
-	return render(request, 'contact.html', {
-		'site_name': 'python.web.id',
-		'title':'Contact - Python Learning',
-		})
-"""
 from django.shortcuts import get_object_or_404
 
 def my_sitemap(request):
