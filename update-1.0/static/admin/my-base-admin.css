@@ -1,0 +1,154 @@
+body {
+
+}
+/*
+.dashboard #content {
+  width: 100%;
+  max-width: 95%;
+}
+*/
+.login #container {
+	border-radius: 5px;
+}
+/*
+#content-main {
+  float: left;
+  width: 100%;
+  max-width: 50%;
+}
+*/
+/*
+#content-related {
+  float: left;
+  margin-left: 1%;
+  margin-right: 0;
+}
+.sidebar-custom {
+  float: left;
+  margin-left: 1%;
+  max-width: 300px;
+  width: 100%;
+}
+#my-menus {
+	display: none;
+}
+*/
+li.changelink+.list-group-item,
+li.addlink+.list-group-item,
+li.deletelink+.list-group-item
+ {
+    text-overflow: ellipsis;
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.navbar-inverse {
+  background-image: none;
+}
+.navbar-inverse .navbar-brand {
+	color: #A9A9A9;
+}
+#my-menus {
+  width: 100%;
+  background: #EAEAEA;
+  border-bottom: 1px solid #ddd;
+}
+#my-menus ul {
+  height: 20px;
+  padding: 0 5px;
+}
+#my-menus ul li {
+  list-style: none;
+  float: left;
+  padding: 5px 10px;
+}
+#my-menus ul li a {
+  line-height: 20px;
+}
+.navbar-inverse {
+  margin-bottom: 0;
+}
+.navbar-text {
+  margin-top: 18px;
+}
+.breadcrumb {
+	margin-bottom: 0;
+}
+.dashboard #content {
+  width: 500px;
+  width: 50%;
+}
+.sidebar-custom {
+  float: right;
+  width: 18em;
+  position: relative;
+  margin-right: -38em;
+}
+.object-tools a.addlink {
+	background: #2297D3 url(../img/tooltag-add.png) 95% center no-repeat;
+ }
+ #changelist-filter h2 {
+  padding: 5px 10px;
+  background: linear-gradient(#6DB3D7, #85C5E5);
+  border-bottom: none;
+}
+input[type=file] {
+  cursor: pointer;
+  display: initial;
+}
+.paginator li {
+	line-height: 30px;
+}
+.paginator .end {
+  border-width: 1px !important;
+}
+.paginator .this-page {
+  font-size: 12px;
+  padding: 5px 10px;
+  background-color: #428bca;
+  border-color: #428bca;
+  color: #fff;
+}
+.paginator .this-page:hover {
+  background-color: #428bca;
+  border-color: #428bca;
+  color: #fff;
+}
+.paginator a:link, .paginator a:visited {
+  padding: 5px 10px;
+  line-height: 1.42857143;
+  color: #428bca;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+.paginator a.showall {
+	float: none;
+}
+textarea.form-control {
+	height: 320px;
+}
+.vTextField, .vURLField, input[type=password] {
+  width: 30em;
+  display: block;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.vTextField:focus, .vURLField:focus, input[type=password]:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
