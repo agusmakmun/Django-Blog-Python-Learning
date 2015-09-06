@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Sitemap - {{ block.super }} {% endblock %}
+{% block canonical_url %}{{ block.super }}/sitemap/{% endblock %}
+
+{% load django_markdown %}
+{% block blog_entries %}
+<style type="text/css">
+  .sitemap ul li {
+    background: #FAFAFA;
+    border-bottom: 1px solid #f0f0f0;
+    border-top: 1px solid #fff;
+    padding: 2px;
+    padding-left: 5px;
+    list-style: decimal;
+  }
+  .sitemap ul li:nth-child(odd) {
+    background: #FFF;
+  }
+</style>
+  <div class="post sitemap">
+    <h2>Sitemap</h2>
+    {% if all_entry %}
+    <ul>
+      {% for object in all_entry %}
+      	<li><a href="{% url "entry_detail" slug=object.slug %}">{{ object.title }}</a> - <i>{{ object.created }}</i></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block widget_sidebar %}
+{% endblock %}
