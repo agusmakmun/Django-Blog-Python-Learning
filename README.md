@@ -4,6 +4,9 @@ Django Blog Python Learning v.2
 <h3> Demo:</h3>
 - <a href="http://python.web.id/" target="_blank">http://python.web.id</a>
 
+<h3> Update and Commits</h3>
+- https://github.com/agusmakmun/Django-Blog-Python-Learning-v.2/commits/master
+
 <h3> Feature:</h3>
 - face 90% bootstrap.
 - admin post, page, author, tags & gallery dan files.
