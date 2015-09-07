@@ -134,6 +134,12 @@ b[f]&&b[f].csi&&(a=Math.floor(b[f].csi().pageT),e&&0<c&&(e[g]("_tbnd",void 0,b[f
             <p><b>Python Learning</b> - Sengaja dibuat untuk memperluas jaringan pengetahuan tentang bahasa permograman Python. dengan demikian akan mempermudah para programmer untuk mendapatkan knowlage. <br /><br />
             Terdapat juga mengenai masalah kuliah yang berhubungan dengan Python Programming.</p>
           </div>
+          <div class="sidebar-module sidebar-module-inset">
+          <h4>Recent Comments</h4>
+          {% load disqus_tags %}
+            {% disqus_recent_comments shortname num_items excerpt_length hide_avatars avatar_size %}
+            {% disqus_recent_comments shortname 5 50 0 24 %}
+          </div>
           {% block widget_sidebar %}
           <div class="sidebar-module sidebar-module-inset">
             <h4>Recent Posts</h4>
