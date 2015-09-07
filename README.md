@@ -16,7 +16,7 @@ Django Blog Python Learning v.2
 - contact form.
 - search box, used for { body, title, and keywords }
 - disqus comments.
-- widget all tags & recent posts.
+- widget all tags, recent comments & recent posts.
 - much more...
 
 <h3>Requirements:</h3>
