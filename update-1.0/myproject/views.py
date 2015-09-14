@@ -6,6 +6,10 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from blog.models import Entry, Tag
 
+from django.template import loader, Context
+from django.db.models import Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 def home(request):
     return render(request, 'blog/base.html', {
 		'site_name': 'python.web.id',
@@ -28,13 +32,25 @@ def resource(request):
 from django.shortcuts import get_object_or_404
 
 def my_sitemap(request):
+    t = loader.get_template('sitemap.html')
     all_entry = Entry.objects.all()
-
-    return render(request, 'sitemap.html', {
-        'site_name': 'python.web.id',
-        'title':'Sitemap - Python Learning',
-        'all_entry':all_entry
-        })
+    paginator = Paginator(all_entry, 2) #show 10 articles per page
+    page = request.GET.get('page')
+    try:
+        all_entry = paginator.page(page)
+    except PageNotAnInteger:
+        all_entry = paginator.page(1)
+    except EmptyPage:
+        all_entry = paginator.page(paginator.num_pages)
+    index = all_entry.number - 1
+    limit = 3 #limit for show range left and right of number pages
+    max_index = len(paginator.page_range)
+    start_index = index - limit if index >= limit else 0
+    end_index = index + limit if index <= max_index - limit else max_index
+    page_range = paginator.page_range[start_index:end_index]
+    
+    c = Context({'all_entry':all_entry, 'page_range': page_range, })
+    return HttpResponse(t.render(c))
 
 def contact(request):
     if request.method == 'GET':
@@ -52,10 +68,6 @@ def contact(request):
             return redirect('contact')
             #return HttpResponse('Thank you for your message.')
     return render(request, "contact.html", {'form': form})
-
-
-from django.template import loader, Context
-from django.db.models import Q
 
 def search(request):
     query = request.GET['q']
@@ -78,8 +90,6 @@ def search(request):
     
     c = Context({ 'query': query, 'results':results, 'page_range': page_range, })
     return HttpResponse(t.render(c))
-
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def displayAllArticlesUnderTage(request, tag_slug):
     #Entry.objects.filter(~Q(id=1))
