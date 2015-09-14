@@ -27,6 +27,26 @@
     </ul>
     {% endif %}
   </div>
+
+<ul class="pagination">
+  <li {% if not all_entry.has_previous %}class="disabled"{% endif %}>
+     <a {% if all_entry.has_previous %}href="?page={{ all_entry.previous_page_number }}" aria-label="Previous" {% endif %}><span aria-hidden="true">«</span></a>
+   </li>
+   <li><a href="?page=1">First</a></li>
+  {% for linkpage in page_range %}
+      {% ifequal linkpage all_entry.number %}
+         <li class="active">
+           <a href="#">{{ all_entry.number }}<span class="sr-only">(current)</span></a>
+         </li>
+      {% else %}
+         <li><a href="?page={{ linkpage }}">{{ linkpage }}</a></li>
+      {% endifequal %}
+  {% endfor %}
+  <li><a href="?page={{ all_entry.paginator.num_pages }}">Last</a></li>
+  <li {% if not all_entry.has_next %}class="disabled"{% endif %}>
+     <a {% if all_entry.has_next %}href="?page={{ all_entry.next_page_number }}" aria-label="Next" {% endif %}><span aria-hidden="true">»</span></a>
+   </li>
+</ul>
 {% endblock %}
 
 {% block widget_sidebar %}
