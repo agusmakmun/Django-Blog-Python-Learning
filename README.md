@@ -36,9 +36,9 @@ Django Blog Python Learning v.2
 - wsgiref==0.1.2
 
 <h3>Screenshoot:</h3>
-<img src="https://scontent-sin1-1.xx.fbcdn.net/hphotos-xlf1/v/t1.0-9/11986960_1028630287170020_1518907652887844598_n.jpg?oh=d6202af01555ddad9e878a506d460751&oe=5663098F"/>
+<img src="http://python.web.id/media/gallery/django_blog_python_learning.png"/>
 
-<img src="https://scontent-sin1-1.xx.fbcdn.net/hphotos-xtf1/v/t1.0-9/11951226_1029677697065279_7838782424142095265_n.jpg?oh=4271328922c9b91747c808aca3ed7fb2&oe=5664DD94"/>
+<img src="http://python.web.id/media/gallery/django_blog_python_learning1.png"/>
 
 <img src="https://fbcdn-sphotos-h-a.akamaihd.net/hphotos-ak-xpt1/v/t1.0-9/10521912_1029678293731886_7939045321269613792_n.jpg?oh=718fd54d5c88329d34e4a833732e0cf2&oe=56744993&__gda__=1449351955_09e525930cc33c7b8f3e7790f103aa74"/>
 
