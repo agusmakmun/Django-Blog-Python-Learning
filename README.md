@@ -11,7 +11,7 @@ Django Blog Python Learning v.2
 - face 90% bootstrap.
 - admin post, page, author, tags & gallery dan files.
 - read more posts
-- pagination posts
+- pagination posts, sitemap page, results query, display posts under tags.
 - related posts
 - next and previous for post.
 - show all posts under tags.
