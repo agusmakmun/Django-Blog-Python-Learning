@@ -7,6 +7,7 @@ class EntryQuerySet(models.QuerySet):
 
 class Author(models.Model):
 	name = models.CharField(max_length=200)
+	avatar = models.ImageField(upload_to='gallery', null=True, blank=True, help_text="Upload Image for Avatar")
 	about = models.TextField(blank=True, null=True)
 	email = models.EmailField(max_length=200, blank=True, null=True, unique=True)
 	website = models.URLField(max_length=200, blank=True, null=True)
