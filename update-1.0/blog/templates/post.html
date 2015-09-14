@@ -37,6 +37,24 @@
     </p>
     {{ object.body|markdown }}
 
+<div class="panel panel-default">
+<div class="panel-heading">Author</div>
+  <div class="panel-body">
+    <div class="media">
+      <div class="media-left media-middle" style="float: left;margin-right: 10px;">
+        <a href="{{ entry.author.website }}">
+          <img class="media-object" alt="{{ entry.author.name }}" title="{{ entry.author }}" src="/media/{{ entry.author.avatar }}" style="width: 64px; height: 64px;">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">{{ entry.author }}</h4>
+        {{ entry.author.about }}<br />
+          Website: <a href="{{ entry.author.website }}" target="_blank">{{ entry.author.website }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="panel panel-default related">
   <div class="panel-heading">
     <h3 class="panel-title">Related Posts</h3>
