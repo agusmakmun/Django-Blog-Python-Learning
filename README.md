@@ -20,6 +20,7 @@ Django Blog Python Learning v.2
 - search box, used for { body, title, and keywords }
 - disqus comments.
 - widget all tags, recent comments & recent posts.
+- about author in posts.
 - much more...
 
 <h3>Requirements:</h3>
