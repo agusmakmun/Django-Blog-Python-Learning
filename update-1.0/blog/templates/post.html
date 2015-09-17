@@ -20,7 +20,8 @@
     <h2><a href="{% url "entry_detail" slug=object.slug %}">{{ object.title }}</a></h2>
     <p class="meta">
       <!-- <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> --> Date Created: {{ object.created }} - 
-      <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> --> By: {{ object.author }} - 
+      <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> --> 
+      By: <a href="/author/{{ object.author.pk }}">{{ object.author }}</a> - 
       <!--<span class="glyphicon glyphicon-tags" aria-hidden="true"></span> --> 
       Tagged under: 
       {% for my_tags in object.tags.all %}
@@ -42,7 +43,7 @@
   <div class="panel-body">
     <div class="media">
       <div class="media-left media-middle" style="float: left;margin-right: 10px;">
-        <a href="{{ entry.author.website }}">
+        <a href="{{ object.author.pk }}">
           <img class="media-object" alt="{{ entry.author.name }}" title="{{ entry.author }}" src="/media/{{ entry.author.avatar }}" style="width: 64px; height: 64px;">
         </a>
       </div>
