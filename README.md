@@ -7,6 +7,9 @@ Django Blog Python Learning v.2
 <h3> Update and Commits</h3>
 - https://github.com/agusmakmun/Django-Blog-Python-Learning-v.2/commits/master
 
+<h3>Documentations, Indonesian Version</h3>
+- http://python.web.id/tag/django/
+
 <h3> Feature:</h3>
 - face 90% bootstrap.
 - admin post, page, author, tags & gallery dan files.
