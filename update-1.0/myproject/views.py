@@ -4,7 +4,7 @@ from blog.forms import ContactForm
 
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
-from blog.models import Entry, Tag
+from blog.models import Entry, Tag, Author
 
 from django.template import loader, Context
 from django.db.models import Q
@@ -91,6 +91,30 @@ def search(request):
     c = Context({ 'query': query, 'results':results, 'page_range': page_range, })
     return HttpResponse(t.render(c))
 
+def displayArticleUnderAuthor(request, pk):
+    t = loader.get_template('post_author.html')
+    author = Author.objects.get(pk = pk)
+    articles = Entry.objects.filter(author = author.id)
+    paginator = Paginator(articles, 10) #show 10 articles per page
+    page = request.GET.get('page')
+    try:
+        articles_list = paginator.page(page)
+    except PageNotAnInteger:
+        articles_list = paginator.page(1)
+    except EmptyPage:
+        articles_list = paginator.page(paginator.num_pages)
+    index = articles_list.number - 1
+    limit = 3 #limit for show range left and right of number pages
+    max_index = len(paginator.page_range)
+    start_index = index - limit if index >= limit else 0
+    end_index = index + limit if index <= max_index - limit else max_index
+    page_range = paginator.page_range[start_index:end_index]
+
+    c = Context({ "articles_author" : articles_list, "post_author" : pk, 
+                  "author_name": author.name, 'page_range': page_range,})
+    return HttpResponse(t.render(c))
+ 
+ 
 def displayAllArticlesUnderTage(request, tag_slug):
     #Entry.objects.filter(~Q(id=1))
     t = loader.get_template('all_tags.html')
