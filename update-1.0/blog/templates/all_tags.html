@@ -12,7 +12,7 @@
               <h2><a href="{% url "entry_detail" slug=obj.slug %}">{{ obj.title }}</a></h2>
               <p class="meta">
                 Date: {{ obj.created }} - 
-                By: {{ obj.author }} - 
+                By: <a href="/author/{{ obj.author.pk }}">{{ obj.author }}</a> - 
                 Tagged under: 
                 {% for my_tags in obj.tags.all %}
                   <a href="/tag/{{ my_tags }}">{{ my_tags }}</a>,
