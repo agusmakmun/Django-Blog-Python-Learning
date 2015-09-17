@@ -12,7 +12,8 @@
           <h2><a href="{% url "entry_detail" slug=object.slug %}">{{ object.title }}</a></h2>
           <p class="meta">
             <!-- <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> --> Date: {{ object.created }} - 
-            <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> --> By: {{ object.author }} - 
+            <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> --> 
+            By: <a href="/author/{{ object.author.pk }}">{{ objcet.author }}</a> - 
             <!--<span class="glyphicon glyphicon-tags" aria-hidden="true"></span> -->
             Tagged under: 
             {% for my_tags in object.tags.all %}
