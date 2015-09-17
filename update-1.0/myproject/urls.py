@@ -12,6 +12,7 @@ from django.contrib.sitemaps.views import sitemap
 from blog.models import Entry
 from .views import thanks, contact, about
 from .views import resource, my_sitemap, search, displayAllArticlesUnderTage
+from .views import displayArticleUnderAuthor
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -25,6 +26,7 @@ urlpatterns = [
     url(r'^contact/$', contact, name='contact'),
     url(r'^results/$', search, name='search'),
     url(r'^tag/(?P<tag_slug>\S+)/$', displayAllArticlesUnderTage, name="tag_slug"),
+    url(r'^author/(?P<pk>\S+)/$', displayArticleUnderAuthor, name="pk"),
 
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
