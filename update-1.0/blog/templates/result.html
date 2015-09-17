@@ -13,7 +13,7 @@
           <p class="meta">
             <!-- <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> --> Date: {{ object.created }} - 
             <!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> --> 
-            By: <a href="/author/{{ object.author.pk }}">{{ objcet.author }}</a> - 
+            By: <a href="/author/{{ object.author.pk }}">{{ object.author }}</a> - 
             <!--<span class="glyphicon glyphicon-tags" aria-hidden="true"></span> -->
             Tagged under: 
             {% for my_tags in object.tags.all %}
