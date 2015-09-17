@@ -24,6 +24,7 @@ Django Blog Python Learning v.2
 - disqus comments.
 - widget all tags, recent comments & recent posts.
 - about author in posts.
+- display article under author.
 - much more...
 
 <h3>Requirements:</h3>
