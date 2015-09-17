@@ -15,6 +15,9 @@ class Author(models.Model):
 	def __unicode__(self):
 		return self.name
 
+	def get_absolute_url(self):
+	        return reverse('author-detail', kwargs={'pk': self.pk})
+	        
 	class Meta:
 		verbose_name = "Author Detail"
 		verbose_name_plural = "Author"
