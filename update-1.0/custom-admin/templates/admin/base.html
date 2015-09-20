@@ -1,0 +1,118 @@
+{% load i18n admin_static %}
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}" />
+{% block extrastyle %}{% endblock %}
+<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{% block stylesheet_ie %}{% static "admin/css/ie.css" %}{% endblock %}" /><![endif]-->
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
+<script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
+<script type="text/javascript">window.__admin_utc_offset__ = "{% filter escapejs %}{% now "Z" %}{% endfilter %}";</script>
+
+<!-- Start This My Custom Admin CSS -->
+<!-- ~/agusenv/local/lib/python2.7/site-packages/django/contrib/admin/templates/admin/base.html -->
+<link rel="shortcut icon" href="{% static "asset/icons/favicon.ico" %}"/>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="{% static "asset/css/bootstrap.min.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "asset/css/bootstrap-theme.min.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "admin/my-custom-admin/my-base-admin.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "asset/css/mystyle.css" %}" />
+
+{% block extrahead %}{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}">
+
+<!-- Container -->
+<div id="container">
+
+    {% if not is_popup %}
+
+    <nav class="navbar navbar-inverse navbar-static-top">
+     <div class="container-fluid">
+        <div class="navbar-header">
+          <!-- {% block branding %}{% endblock %} -->
+          <a class="navbar-brand" href="/admin/">Django Administration</a>
+          <style type="text/css"></style>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          {% block usertools %}
+          {% if has_permission %}
+          <p class="navbar-text navbar-right">
+            {% block welcome-msg %}
+                {% trans 'Welcome,' %}
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+            {% endblock %}
+            {% block userlinks %}
+                {% if site_url %}
+                    <a href="{{ site_url }}" target="_blank" class="navbar-link">{% trans 'View site' %}</a> /
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}" class="navbar-link">{% trans 'Documentation' %}</a> /
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}" class="navbar-link">{% trans 'Change password' %}</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}" class="navbar-link">{% trans 'Log out' %}</a>
+            {% endblock %}
+          </p>
+          {% endif %}
+          {% endblock %}
+          {% block nav-global %}{% endblock %}
+        </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    {% block breadcrumbs %}
+    <ol class="breadcrumb">
+    <li><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a></li>
+    {% if title %} &rsaquo; <li class="active">{{ title }}</li>{% endif %}
+    </ol>
+    {% endblock %}
+    {% endif %}
+
+    {% block messages %}
+        {% if messages %}
+        <ul class="messagelist">{% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+        {% endfor %}</ul>
+        {% endif %}
+    {% endblock messages %}
+
+    <div id="my-menus" style="display:none;">
+        <ul>
+            <li><a href="/admin/">Home</a></li>
+            <li><a href="/admin/blog/entry/">Entrys</a></li>
+            <li><a href="/admin/blog/gallery/">Gallery and Files</a></li>
+        </ul>
+    </div>
+
+    <!-- Content -->
+    <div id="content" class="{% block coltype %}colM{% endblock %}">
+        {% block pretitle %}{% endblock %}
+        {% block content_title %}{% if title %}<h4>{{ title }}</h4>{% endif %}{% endblock %}
+        {% block content %}
+        {% block object-tools %}{% endblock %}
+        {{ content }}
+        {% endblock %}
+        {% block sidebar %}{% endblock %}
+        <br class="clear" />
+    </div>
+    <!-- END Content -->
+
+    {% block footer %}<div id="footer"></div>{% endblock %}
+</div>
+<!-- END Container -->
+<!-- Start Bootstrap JS -->
+<script src="{% static "asset/js/jquery.js" %}"></script>
+<script src="{% static "asset/js/bootstrap.min.js" %}"></script>
+<script src="{% static "asset/js/docs.min.js" %}"></script>
+</body>
+</html>
