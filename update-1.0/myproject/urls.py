@@ -13,6 +13,10 @@ from blog.models import Entry
 from .views import thanks, contact, about
 from .views import resource, my_sitemap, search, displayAllArticlesUnderTage
 from .views import displayArticleUnderAuthor
+info_dict = {
+    'queryset': Entry.objects.published(),
+    'date_field': 'modified',
+}
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
