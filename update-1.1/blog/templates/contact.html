@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Contact - {{ block.super }} {% endblock %}
+{% block canonical_url %}{{ block.super }}/contact/{% endblock %}
+{% block blog_entries %}
+  <div class="post">
+    <h2>Contact</h2>
+    <p><center><span style="color: #f00">*) Please type again your email on body message.</span><br />
+    	{ If this form can not work, contact me at <a href="https://www.facebook.com/messages/agaust" target="_blank">Facebook Chat</a> }</center></p>
+      <form id="my_form" method="post">
+	    {% csrf_token %}
+	    {{ form }}
+	    <div class="form-actions">
+	      <button type="submit">Send</button>
+	    </div>
+	</form>
+  </div>
+{% endblock %}
+
+{% block widget_sidebar %}
+{% endblock %}
