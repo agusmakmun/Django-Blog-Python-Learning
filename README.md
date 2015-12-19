@@ -17,7 +17,7 @@ Repository       : https://github.com/agusmakmun/Django-Blog-Python-Learning-v.2
 <h3> Update and Commits</h3>
 - https://github.com/agusmakmun/Django-Blog-Python-Learning-v.2/commits/master
 
-<h3>Documentations, Indonesian Version</h3>
+<h3>Stack Problem</h3>
 - https://python.web.id/tag/django/
 
 <h3> Feature:</h3>
