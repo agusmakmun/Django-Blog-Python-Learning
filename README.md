@@ -19,6 +19,7 @@ Repository       : https://github.com/agusmakmun/Django-Blog-Python-Learning-v.2
 
 <h3>Stack Problem</h3>
 - https://python.web.id/tag/django/
+- https://github.com/agusmakmun/Some-Examples-of-Simple-Python-Script/tree/master/Django
 
 <h3> Feature:</h3>
 - django-wpadmin
