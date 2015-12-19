@@ -6,7 +6,7 @@ Release Source Code Django Blog Python Learning v.2.1.1
 Name             : Django Blog Python Learning v.2
 Created By       : Agus Makmun (Summon Agus)
 Blog             : bloggersmart.net - python.web.id
-License          : GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+License          : GNU GENERAL PUBLIC LICENSE Version 2, June 1991
 Repository       : https://github.com/agusmakmun/Django-Blog-Python-Learning-v.2/
 """
 </pre>
