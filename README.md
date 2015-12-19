@@ -1,5 +1,5 @@
 # Django-Blog-Python-Learning-v.2
-Release Source Code Django Blog Python Learning v.2.1.1
+Release Source Code of Django Blog Python Learning v.2.1.1
 
 <pre>
 """
