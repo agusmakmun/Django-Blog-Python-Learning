@@ -29,15 +29,15 @@ ALLOWED_HOSTS = ['python.web.id','localhost']
 
 
 # Application definition
-
 INSTALLED_APPS = (
+    'wpadmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'django.contrib.sites',
+    'django.contrib.sites',
     'blog',
     'ckeditor',
     'ckeditor_uploader',
@@ -188,3 +188,18 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 )
+
+WPADMIN = {
+    'admin': {
+        #'admin_site': 'test_project.admin.admin',
+        'title': 'Python Learning',
+        'menu': {
+            'top': 'wpadmin.menu.menus.BasicTopMenu',
+            'left': 'wpadmin.menu.menus.BasicLeftMenu',
+        },
+        'dashboard': {
+            'breadcrumbs': True,
+        },
+        'custom_style': STATIC_URL + 'wpadmin/css/themes/coffe.css',
+    }
+}
