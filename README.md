@@ -49,7 +49,6 @@ django-ckeditor==5.0.2
 django-disqus==0.5
 django-wpadmin==1.7.4
 funcsigs==0.4
-irclog2html==2.14.0
 mock==1.3.0
 pbr==1.8.0
 postgres==2.2.0
