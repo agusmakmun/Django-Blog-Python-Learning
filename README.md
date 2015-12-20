@@ -58,7 +58,7 @@ six==1.9.0
 wsgiref==0.1.2
 </pre>
 
-<h3>Screenshoot:</h3>
+<h3>Screenshot:</h3>
 <h4>Homepage</h4>
 <img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning-v.2/master/update-1.1/screenshot/homepage.png"/>
 
