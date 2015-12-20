@@ -32,7 +32,7 @@ class TagAdminForm(forms.ModelForm):
     def save(self, commit=True):
         entry = super(TagAdminForm, self).save(commit=False)
         if commit:
-            buku.save()
+            entry.save()
 
         if entry.pk:
             entry.tags = self.cleaned_data['tags']
