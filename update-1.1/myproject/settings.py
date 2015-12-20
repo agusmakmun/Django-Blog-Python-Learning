@@ -96,7 +96,7 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-SITE_ID = 3
+SITE_ID = 1
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
