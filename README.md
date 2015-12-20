@@ -8,8 +8,13 @@ Created By       : Agus Makmun (Summon Agus)
 Blog             : bloggersmart.net - python.web.id
 License          : GNU GENERAL PUBLIC LICENSE Version 2, June 1991
 Repository       : https://github.com/agusmakmun/Django-Blog-Python-Learning-v.2/
+Modified from    : https://github.com/arocks/qblog - Django 1.7 - Arun Ravindran
 """
 </pre>
+
+<blockquote>
+This repository last modified from old project of django blog at https://github.com/arocks/qblog. Thanks so much for it.
+</blockquote>
 
 <h3> Demo:</h3>
 - <a href="https://python.web.id/" target="_blank">https://python.web.id</a>
