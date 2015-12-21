@@ -59,6 +59,23 @@ class Entry(models.Model):
 		return '<a href="'+self.domain_post+str(self.slug)+'" target="_blank">'+str(self.slug)+'</a>'
 	visit_on_site.allow_tags = True
 
+	def json_default_post(self):
+		domain = 'https://python.web.id'
+		cover_url = ''
+		if self.cover.url:
+			cover_url = self.cover.url
+		else:
+			cover_url = cover_url
+		return dict(
+				title = self.title, 
+				url = domain+"/blog/"+str(self.slug), 
+				cover =  domain+str(self.cover.url),
+				author = self.author.name, 
+				created = self.created.isoformat(), 
+				modified = self.modified.isoformat(), 
+				tags = [p.slug for p in self.tags.all()], 
+				body = self.body
+			)
 
 	class Meta:
 		verbose_name = "Blog Entry"
