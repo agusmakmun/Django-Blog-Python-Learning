@@ -48,6 +48,7 @@
   <a class="btn-sm btn-danger" href="https://plus.google.com/share?url=https://python.web.id{% url "entry_detail" slug=object.slug %}" target="_blank">Google+</a>
   <a class="btn-sm btn-info" href="https://twitter.com/share" target="_blank">Twitter</a>
   <a class="btn-sm btn-success" href="javascript:window.print()">Print Page</a>
+  <a class="btn-sm btn-warning" href="{% url 'page_json_default_post' pk=object.pk %}" target="_blank">JSON Output</a>
 </div>
 
 <style type="text/css" media="print">
