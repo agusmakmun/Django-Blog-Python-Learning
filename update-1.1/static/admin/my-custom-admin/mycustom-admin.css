@@ -1,0 +1,4 @@
+/* Just simply how to disable tooltip from ckeditor */
+#cke_tooltip {
+    display: none!important;
+}
