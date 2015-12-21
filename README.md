@@ -47,6 +47,9 @@ This repository modified from old project of django blog at https://github.com/a
 - display article under author.
 - much more...
 
+<h3>ChangeLog</h3>
+- adding new feature for output post with json format (example: https://python.web.id/json-posts/48/)
+
 <h3>Prequirements:</h3>
 <pre>
 Django==1.8.5
