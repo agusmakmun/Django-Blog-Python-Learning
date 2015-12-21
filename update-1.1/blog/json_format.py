@@ -1,0 +1,14 @@
+import json
+from . import models
+from django.http import HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
+
+"""Outputing post to JSON format, with pk/id from post."""
+def json_default_posts(request, pk):
+	try:
+		entry_list = models.Entry.objects.get(pk=pk)
+		data = entry_list.json_default_post()
+	except ObjectDoesNotExist:
+		data = {'error_message':'Object Does NotExist'}
+	
+	return HttpResponse(json.dumps(data, indent=4), content_type='application/json')
