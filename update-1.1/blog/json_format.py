@@ -6,8 +6,8 @@ from django.core.exceptions import ObjectDoesNotExist
 """Outputing post to JSON format, with pk/id from post."""
 def json_default_posts(request, pk):
 	try:
-		entry_list = models.Entry.objects.get(pk=pk)
-		data = entry_list.json_default_post()
+		entry = models.Entry.objects.get(pk=pk)
+		data = entry.json_default_post()
 	except ObjectDoesNotExist:
 		data = {'error_message':'Object Does NotExist'}
 	
