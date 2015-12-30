@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ object.title }} - {{ block.super }}{% endblock %}
-{% block meta-content %}{{ object.body|safe|truncatewords:"20" }}{% endblock %}
+{% block meta-content %}{{ object.body|safe|striptags|truncatewords:"20" }}{% endblock %}
 {% block meta-author %}{{ object.author }}{% endblock %}
 {% block meta-keywords %}{{ object.keywords }}{% endblock %}
 {% block og_type %}article{% endblock %}
