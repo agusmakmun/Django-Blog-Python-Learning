@@ -61,15 +61,16 @@ class Entry(models.Model):
 
 	def json_default_post(self):
 		domain = 'https://python.web.id'
-		cover_url = ''
-		if self.cover.url:
-			cover_url = self.cover.url
-		else:
+		cover_url = 'None'
+		try:
+			cover_url = domain+str(self.cover.url)
+		except:
 			cover_url = cover_url
+
 		return dict(
 				title = self.title, 
 				url = domain+"/blog/"+str(self.slug), 
-				cover =  domain+str(self.cover.url),
+				cover =  cover_url,
 				author = self.author.name, 
 				created = self.created.isoformat(), 
 				modified = self.modified.isoformat(), 
