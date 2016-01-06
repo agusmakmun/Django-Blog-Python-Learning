@@ -33,14 +33,18 @@ class BlogDetail(generic.DetailView):
 
     def tracking_hit_post(self):
         entry = self.model.objects.get(pk=self.object.id)
+        filter_ip = ['66.249.71.174' ] #this such as google boot
+        
         try:
         	models.Entry_Views.objects.get(entry=entry, ip=self.get_client_ip(), session=self.request.session.session_key)
         except ObjectDoesNotExist:
-                view = models.Entry_Views(entry=entry, 
+        	if str(self.get_client_ip()) not in filter_ip:
+                	view = models.Entry_Views(entry=entry, 
                 			  ip=self.request.META['REMOTE_ADDR'],
                 			  created=datetime.datetime.now(),
                 			  session=self.request.session.session_key)
-                view.save()
+                	view.save()
+                else: pass
 	    return models.Entry_Views.objects.filter(entry=entry).count()
 	
     def get_context_data(self, **kwargs):
