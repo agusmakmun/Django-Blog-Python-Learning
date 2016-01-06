@@ -40,7 +40,7 @@ class BlogDetail(generic.DetailView):
         except ObjectDoesNotExist:
         	import socket
         	dns = socket.getfqdn(str(self.get_client_ip()))
-        	if dns not in filter_dns:
+        	if str(dns).split('.') not in filter_dns:
                 	view = models.Entry_Views(entry=entry, 
                 			  ip=self.request.META['REMOTE_ADDR'],
                 			  created=datetime.datetime.now(),
