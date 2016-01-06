@@ -33,7 +33,7 @@ class BlogDetail(generic.DetailView):
 
     def tracking_hit_post(self):
         entry = self.model.objects.get(pk=self.object.id)
-        filter_dns = ['googlebot'] #this such as google boot
+        filter_dns = ['googlebot', 'yahoo', 'bing','solidseodedicated'] #this such as google boot, or other boot.
         
         try:
         	models.Entry_Views.objects.get(entry=entry, ip=self.get_client_ip(), session=self.request.session.session_key)
