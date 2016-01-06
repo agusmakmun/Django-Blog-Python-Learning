@@ -97,9 +97,15 @@ class PageAdmin(admin.ModelAdmin):
 
 class TagAdmin(admin.ModelAdmin):
     list_per_page = 10
-    
+
+class Entry_Views_Admin(admin.ModelAdmin):
+    list_display = ("entry", "ip", "session", "created")
+    list_per_page = 20
+
+
 admin.site.register(models.Author, AuthorAdmin)
 admin.site.register(models.Entry, EntryAdmin)
 admin.site.register(models.Gallery, GalleryAdmin)
 admin.site.register(models.Page, PageAdmin)
 admin.site.register(models.Tag, TagAdmin)
+admin.site.register(models.Entry_Views, Entry_Views_Admin)
