@@ -31,7 +31,12 @@
         <a href="/tag/{{ my_tags }}">{{ my_tags }}</a>,
       {% endfor %}
     </p>
-    <p align="right" class='ip-client'>Your IP: {{ get_client_ip }}</p>	    
+
+    <p align="right" class='ip-client'>
+     <i>Your IP:</i> <span class="label label-danger">{{ get_client_ip }}</span> 
+     <i>Views:</i> <span class="label label-primary">{{ tracking_hit_post }}</span>
+    </p>
+    
     <p>
     {% if entry.cover %}
     <caption align="bottom">
