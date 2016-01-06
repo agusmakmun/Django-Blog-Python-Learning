@@ -38,7 +38,7 @@ class BlogDetail(generic.DetailView):
         	models.Entry_Views.objects.get(entry=entry, ip=self.get_client_ip(), session=self.request.session.session_key)
         except ObjectDoesNotExist:
         	import socket
-        	dns = str(socket.getfqdn(self.get_client_ip())).split('.')[-1]
+        	dns = str(socket.getfqdn(str(self.get_client_ip()))).split('.')[-1]
         	try:
         		if int(dns):
                 		view = models.Entry_Views(entry=entry, 
