@@ -3,6 +3,9 @@ from django.views import generic
 from . import models
 from django.http import HttpResponse
 
+import datetime
+from django.core.exceptions import ObjectDoesNotExist
+
 class BlogIndex(generic.ListView):
     queryset = models.Entry.objects.published()
     template_name = "home.html"
@@ -27,7 +30,19 @@ class BlogDetail(generic.DetailView):
         else:
             ip = self.request.META.get("REMOTE_ADDR", "")
         return ip
-        
+
+    def tracking_hit_post(self):
+        entry = self.model.objects.get(pk=self.object.id)
+        try:
+        	models.Entry_Views.objects.get(entry=entry, ip=self.get_client_ip(), session=self.request.session.session_key)
+        except ObjectDoesNotExist:
+                view = models.Entry_Views(entry=entry, 
+                			  ip=self.request.META['REMOTE_ADDR'],
+                			  created=datetime.datetime.now(),
+                			  session=self.request.session.session_key)
+                view.save()
+	    return models.Entry_Views.objects.filter(entry=entry).count()
+	
     def get_context_data(self, **kwargs):
     	context_data = super(BlogDetail, self).get_context_data(**kwargs)
     	related_entries = models.Entry.objects.filter(
@@ -37,6 +52,7 @@ class BlogDetail(generic.DetailView):
         alltags = models.Tag.objects.all()
 
         context_data['get_client_ip'] = self.get_client_ip
+        context_data['tracking_hit_post'] = self.tracking_hit_post()
         context_data['alltags'] = alltags
         context_data['count_tags'] = related_entries.count
     	context_data['related_entries'] = related_entries[:5] #limitation for post
