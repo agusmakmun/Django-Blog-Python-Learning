@@ -33,12 +33,14 @@ class BlogDetail(generic.DetailView):
 
     def tracking_hit_post(self):
         entry = self.model.objects.get(pk=self.object.id)
-        filter_ip = ['66.249.71.174' ] #this such as google boot
+        filter_dns = ['googlebot'] #this such as google boot
         
         try:
         	models.Entry_Views.objects.get(entry=entry, ip=self.get_client_ip(), session=self.request.session.session_key)
         except ObjectDoesNotExist:
-        	if str(self.get_client_ip()) not in filter_ip:
+        	import socket
+        	dns = socket.getfqdn(str(self.get_client_ip()))
+        	if dns not in filter_dns:
                 	view = models.Entry_Views(entry=entry, 
                 			  ip=self.request.META['REMOTE_ADDR'],
                 			  created=datetime.datetime.now(),
