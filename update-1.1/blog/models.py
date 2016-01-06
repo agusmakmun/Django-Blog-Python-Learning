@@ -3,6 +3,7 @@ from django.db.models import TextField
 from django.core.urlresolvers import reverse
 from ckeditor.fields import RichTextField
 from ckeditor_uploader.fields import RichTextUploadingField
+import datetime
 
 class EntryQuerySet(models.QuerySet):
     def published(self):
@@ -142,3 +143,16 @@ class Page(models.Model):
 		verbose_name = "Blog Page"
 		verbose_name_plural = "Blog Pages"
 		ordering = ["-created"]
+
+
+class Entry_Views(models.Model):
+	entry = models.ForeignKey(Entry, related_name='entry_views')
+	ip = models.CharField(max_length=40)
+	session = models.CharField(max_length=40, null=True)
+	created = models.DateTimeField(default=datetime.datetime.now())
+
+	def __unicode__(self):
+		return self.entry.title
+
+	class Meta:
+		verbose_name_plural = "Entry Views"
