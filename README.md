@@ -49,7 +49,7 @@ Modified from    : https://github.com/arocks/qblog - Django 1.7 - Arun Ravindran
 
 ### ChangeLog
 
-* https://github.com/agusmakmun/Django-Blog-Python-Learning/blob/master/LICENSE
+* https://github.com/agusmakmun/Django-Blog-Python-Learning/blob/master/CHANGELOG.md
 
 ### Prequirements:
 
