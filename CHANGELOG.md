@@ -1,3 +1,7 @@
+### v.3.1
+
+* Fixed typo
+
 ### v.3.0
 
 * Fixed DEV-OPS and Markdown.
