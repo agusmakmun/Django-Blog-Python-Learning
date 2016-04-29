@@ -128,7 +128,7 @@ class Page(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("page_detail", kwargs={"slug_page": self.slug})
+        return reverse("page_detail", kwargs={"slug": self.slug})
 
     def visit_on_site(self):
         return '<a href="'+self.domain_post+str(self.slug)+'" target="_blank">'+str(self.slug)+'</a>'
