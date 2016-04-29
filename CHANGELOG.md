@@ -1,6 +1,6 @@
 ### v.3.0
 
-* Fixed the DEV-OPS and Markdown.
+* Fixed DEV-OPS and Markdown.
 
 ### v.2.1.1
 
