@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block blog_entries %}
+{% for object in object_list %}
+  <div class="post">
+    <h2><a href="{% url "entry_detail" slug=object.slug %}">{{ object.title }}</a></h2>
+    <p class="meta">
+      Date Created: {{ object.created }} - 
+      By: <a href="{% url 'author_page' pk=object.author.pk %}">{{ object.author }}</a> - 
+      Tagged under: 
+      {% for tag in obj.tags.all %}
+        <a href="{% url 'tag_page' tag_slug=tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+    {{ object.body|safe|striptags|truncatewords:"20"|linebreaks }}
+    <span style="float:right"><a href="{% url "entry_detail" slug=object.slug %}">Read More &rarr;</a></span>
+    <div style="clear:both;border-bottom: 1px solid #F2F2F2;margin: 10px 0"></div>
+  </div>
+{% endfor %}
+{% endblock %}

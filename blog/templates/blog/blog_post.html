@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }} - {{ block.super }}{% endblock %}
+{% block meta-content %}{{ object.body|safe|striptags|truncatewords:"20" }}{% endblock %}
+{% block meta-author %}{{ object.author }}{% endblock %}
+{% block meta-keywords %}{{ object.keywords }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block meta-image %}/media/{{ object.cover }}{% endblock %}
+{% block canonical_url %}{{ block.super }}{% url "entry_detail" slug=object.slug %}{% endblock %}
+{% block og_title %}{{ object.title }} - {{ block.super }}{% endblock %}
+{% block og_description %}{{ object.body|safe|striptags|truncatewords:"20" }}{% endblock %}
+{% block og_url %}{{ block.super }}{% url "entry_detail" slug=object.slug %}{% endblock %}
+{% block twitter_desc %}{{ object.body|safe|truncatewords:"20" }}{% endblock %}
+{% block twitter_img %}/media/{{ object.cover }}{% endblock %}
+{% block twitter_title %}{{ object.title }} - {{ block.super }}{% endblock %}
+
+{% block custom_meta_tags %}
+{% for tag in object.tags.all %}
+    <meta property="article:tag" content="{{ tag }}" />{% endfor %}
+{% endblock %}
+
+{% block blog_entries %}
+  <div class="post" id="printable">
+    <h2><a href="{% url "entry_detail" slug=object.slug %}">{{ object.title }}</a></h2>
+    <p class="meta">
+      Date Created: {{ object.created }} - 
+      By: <a href="{% url 'author_page' pk=object.author.pk %}">{{ object.author }}</a> -
+      Tagged under: 
+      {% for tag in object.tags.all %}
+        <a href="{% url 'tag_page' tag_slug=tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    </p>
+
+    <p align="right" class='ip-client'>
+     <i>Your IP:</i> <span class="label label-danger">{{ get_client_ip }}</span> 
+     <i>Views:</i> <span class="label label-primary">{{ tracking_hit_post }}</span>
+    </p>
+    
+    <p>
+    {% if entry.cover %}
+    <caption align="bottom">
+      <img class="cover-post" src="/media/{{ entry.cover }}" title="{{ object.title }}" alt="{{ object.title }}"/>
+    <span style="margin-left: 1px;background: #F2F4F3; padding: 0 5px; text-shadow: 1px 1px 1px #fff;">{{ object.title }}</span>
+    </caption>
+    {% endif %}
+    </p>
+    {{ object.body|safe }}
+
+<div class="share panel-body" id="non-printable">
+  <span>Share on: </span>
+  <a class="btn-sm btn-primary" href="https://www.facebook.com/sharer/sharer.php?u=https://python.web.id{% url "entry_detail" slug=object.slug %}" target="_blank">Facebook</a>
+  <a class="btn-sm btn-danger" href="https://plus.google.com/share?url=https://python.web.id{% url "entry_detail" slug=object.slug %}" target="_blank">Google+</a>
+  <a class="btn-sm btn-info" href="https://twitter.com/share" target="_blank">Twitter</a>
+  <a class="btn-sm btn-success" href="javascript:window.print()">Print Page</a>
+  <a class="btn-sm btn-warning" href="{% url 'page_json_default_post' pk=object.pk %}" target="_blank">JSON Output</a>
+</div>
+
+<style type="text/css" media="print">
+ @media print {
+ #non-printable, .ip-client { display: none; }
+ #printable { display: block; width: 100%;height: 100%;}
+ a[href]::after {content: "";} /*content: " (" attr(href) ")"*/
+ }
+</style>
+
+<div class="panel panel-default" id="non-printable">
+<div class="panel-heading">Author</div>
+  <div class="panel-body">
+    <div class="media">
+      <div class="media-left media-middle" style="float: left;margin-right: 10px;">
+        <a href="{% url 'author_page' pk=object.author.pk %}">
+          <img class="media-object" alt="{{ entry.author.name }}" title="{{ entry.author }}" src="/media/{{ entry.author.avatar }}" style="width: 64px; height: 64px;">
+        </a>
+      </div>
+      <div class="media-body">
+        <h4 class="media-heading">{{ entry.author }}</h4>
+        {{ entry.author.about|safe }}<br />
+          Website: <a href="{{ entry.author.website }}" target="_blank">{{ entry.author.website }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default related" id="non-printable">
+  <div class="panel-heading">
+    <h3 class="panel-title">Related Posts</h3>
+  </div>
+    <ul class="list-group">
+      {% for object in related_entries %}
+        <li class="list-group-item"><a href="{% url "entry_detail" slug=object.slug %}">{{ object.title }}</a> - <i>{{ object.created }}</i></li>
+        {% empty %}
+          <p style="margin: 1em;">No related posts!</p>
+      {% endfor %}
+    </ul>
+</div>
+
+<ul class="pager" id="non-printable">
+  <li class="previous">
+  {% if entry.get_previous_by_created %}
+    <a href="{% url 'entry_detail' slug=entry.get_previous_by_created.slug %}">&larr; Previous</a>
+  {% endif %}
+  </li>
+  <li class="next">
+  {% if entry.get_next_by_created %}
+    <a href="{% url 'entry_detail' slug=entry.get_next_by_created.slug %}">Next &rarr;</a>
+  {% endif %}
+  </li>
+</ul>
+
+   {% load disqus_tags %}
+   {% set_disqus_identifier "blogentry_" object.title %}
+   {% set_disqus_title object.title %}
+   {% disqus_show_comments %}
+   <!-- disqus_dev -->
+  </div>
+{% endblock %}

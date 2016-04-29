@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }} - {{ block.super }} {% endblock %}
+{% block meta-content %}{{ object.body|safe|truncatewords:"20" }}{% endblock %}
+{% block meta-author %}{{ object.author }}{% endblock %}
+{% block canonical_url %}{{ block.super }}{% url "page_detail" slug=object.slug %}{% endblock %}
+
+{% block blog_entries %}
+  <div class="post">
+    <h2><a href="{% url "page_detail" slug=object.slug %}">{{ object.title }}</a></h2>
+    <p class="meta">
+      Date: {{ object.created }}
+      By: {{ object.author }} 
+    </p>
+    <p>
+	{{ object.body|safe }}
+	</p>
+  </div>
+{% endblock %}
+
+{% block widget_sidebar %}
+{% endblock %}
