@@ -1,3 +1,7 @@
+### v.3.3
+
+* Fix locate of handlers
+
 ### v.3.2
 
 * Fix handling error 400, 403, 404, 500
