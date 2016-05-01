@@ -1,3 +1,7 @@
+### v.3.2
+
+* Fix handling error 400, 403, 404, 500
+
 ### v.3.1
 
 * Fixed typo
