@@ -4,7 +4,7 @@ from django.views import generic
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail, BadHeaderError
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.template import loader, Context, RequestContext
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from blog.models import Entry, Tag, Author, Page
@@ -52,6 +52,7 @@ class BlogDetail(generic.DetailView):
                         view.save()
                     else: pass
                 except ValueError: pass
+        except MultipleObjectsReturned: pass
         return Entry_Views.objects.filter(entry=entry).count()
 
     def get_context_data(self, **kwargs):
