@@ -1,3 +1,7 @@
+### v.3.4
+
+* Fixed MultipleObjectsReturned
+
 ### v.3.3
 
 * Fix locate of handlers
