@@ -1,153 +1,164 @@
 from django.db import models
-from django.db.models import TextField
+from django.utils import timezone
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from ckeditor.fields import RichTextField
-from ckeditor_uploader.fields import RichTextUploadingField
-import datetime
 
-class EntryQuerySet(models.QuerySet):
+from redactor.fields import RedactorField
+
+
+class TimeStampedModel(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Author(models.Model):
+    user = models.ForeignKey(User, related_name='author')
+    avatar = models.ImageField(upload_to='gallery/avatar/%Y/%m/%d',
+                               null=True,
+                               blank=True,
+                               help_text="Upload your photo for Avatar")
+    about = models.TextField()
+    website = models.URLField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_absolute_url(self):
+        return reverse('author_posts_page',
+                       kwargs={'username': self.user.username})
+
+    class Meta:
+        verbose_name = 'Detail Author'
+        verbose_name_plural = 'Authors'
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def get_total_posts(self):
+        return Packet.objects.filter(tags__pk=self.pk).count()
+
+    class Meta:
+        verbose_name = 'Detail Tag'
+        verbose_name_plural = 'Tags'
+
+
+class PostQuerySet(models.QuerySet):
+
     def published(self):
         return self.filter(publish=True)
 
-class Author(models.Model):
-    name    = models.CharField(max_length=200)
-    avatar  = models.ImageField(upload_to='gallery/%Y/%m/%d', null=True, blank=True, help_text="Upload Image for Avatar")
-    about   = models.TextField()
-    email   = models.EmailField(max_length=200, blank=True, null=True, unique=True)
-    website = models.URLField(max_length=200, blank=True, null=True)
 
-    def __unicode__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('author-detail', kwargs={'pk': self.pk})
-       
-    class Meta:
-        verbose_name = "Author Detail"
-        verbose_name_plural = "Author"
-
-class Tag(models.Model):
-    slug        = models.SlugField(max_length=200, unique=True)
-
-    def __unicode__(self):
-        return self.slug
-
-class Entry(models.Model):
-    title       = models.CharField(max_length=200)
-    cover       = models.ImageField(upload_to='covers/%Y/%m/%d', null=True, blank=True)
-    body        = RichTextUploadingField()#RichTextField()
-    slug        = models.SlugField(max_length=200, unique=True)
-    author      = models.ForeignKey('Author')
-    keywords    = models.CharField(max_length=200, null=True, blank=True)
-    publish     = models.BooleanField(default=True)
-    created     = models.DateTimeField(auto_now_add=True)
-    modified    = models.DateTimeField(auto_now=True)
-    tags        = models.ManyToManyField('Tag')
-
-    objects = EntryQuerySet.as_manager()
-
-    domain_post = 'https://python.web.id/blog/'
-
-    def __unicode__(self):
-        return self.title
-
-    def get_absolute_url(self):
-        return reverse("entry_detail", kwargs={"slug": self.slug})
-
-    def visit_on_site(self):
-        return '<a href="'+self.domain_post+str(self.slug)+'" target="_blank">'+str(self.slug)+'</a>'
-    visit_on_site.allow_tags = True
-
-    def json_default_post(self):
-        domain = 'https://python.web.id'
-        cover_url = 'None'
-        try:
-            cover_url = domain+str(self.cover.url)
-        except:
-            cover_url = cover_url
-
-        return dict(
-            title = self.title,
-            url = domain+"/blog/"+str(self.slug),
-            cover =  cover_url,
-            author = self.author.name,
-            created = self.created.isoformat(),
-            modified = self.modified.isoformat(),
-            tags = [p.slug for p in self.tags.all()],
-            body = self.body
-        )
-
-    class Meta:
-        verbose_name = "Blog Entry"
-        verbose_name_plural = "Blog Entries"
-        ordering = ["-created"]
-
-class Gallery(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=200, help_text="Type title of file or image")
-    image_upload = models.ImageField(upload_to='gallery/%Y/%m/%d', null=True, blank=True, help_text="Please Choice only One Field, Image or Files")
-    file_upload = models.FileField(upload_to='files/%Y/%m/%d', null=True, blank=True, help_text="Please Choice only One Field, Image or Files")
-
-    domain = 'https://python.web.id'
-
-    def file_type(self):
-        if self.image_upload:
-            return '<img height="40" width="60" src="%s"/>' % self.image_upload.url
-        return '<img height="40" width="45" src="/static/asset/icons/file-icon.png"/>'
-    file_type.short_description = 'Type'
-    file_type.allow_tags = True
-
-    def get_absolute_url(self):
-        if self.image_upload:
-            return '<a href="'+self.domain+self.image_upload.url+'" target="_blank">'+self.domain+self.image_upload.url+'</a>'
-        return '<a href="'+self.domain+self.file_upload.url+'" target="_blank">'+self.domain+self.file_upload.url+'</a>'
-    get_absolute_url.short_description = 'Absolute Url'
-    get_absolute_url.allow_tags = True
-
-    def __unicode__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = "Gallery Entry"
-        verbose_name_plural = "Gallery and Files"
-        ordering = ["-created"]
-
-class Page(models.Model):
+class Post(TimeStampedModel):
+    author = models.ForeignKey(Author, related_name='author_post')
     title = models.CharField(max_length=200)
-    body = RichTextUploadingField()#RichTextField()
     slug = models.SlugField(max_length=200, unique=True)
-    author = models.ForeignKey('Author')
+    cover = models.ImageField(upload_to='gallery/covers/%Y/%m/%d',
+                              null=True,
+                              blank=True,
+                              help_text='Optional cover post')
+    description = RedactorField(
+        allow_file_upload=False,
+        redactor_options={
+            'lang': 'en',
+            'focus': 'true',
+            'buttons': [
+                'formatting', 'bold', 'italic',
+                'unorderedlist', 'orderedlist', 'outdent',
+                'indent', 'image', 'link', 'alignment',
+                'horizontalrule',
+            ]
+        }
+    )
+    tags = models.ManyToManyField('Tag')
+    keywords = models.CharField(max_length=200, null=True, blank=True,
+                                help_text='Keywords sparate by comma.')
+    meta_description = models.TextField(null=True, blank=True)
+
     publish = models.BooleanField(default=True)
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
-    domain_post = 'https://python.web.id/page/'
-
-    def __unicode__(self):
-        return self.title
+    objects = PostQuerySet.as_manager()
 
     def get_absolute_url(self):
-        return reverse("page_detail", kwargs={"slug": self.slug})
+        return reverse('detail_post_page', kwargs={'slug': self.slug})
 
-    def visit_on_site(self):
-        return '<a href="'+self.domain_post+str(self.slug)+'" target="_blank">'+str(self.slug)+'</a>'
-    visit_on_site.allow_tags = True
+    def __str__(self):
+        return self.title
 
     class Meta:
-        verbose_name = "Blog Page"
-        verbose_name_plural = "Blog Pages"
+        verbose_name = 'Detail Post'
+        verbose_name_plural = 'Posts'
         ordering = ["-created"]
 
-class Entry_Views(models.Model):
-    entry = models.ForeignKey(Entry, related_name='entry_views')
+
+class Page(TimeStampedModel):
+    author = models.ForeignKey(Author, related_name='author_page')
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
+    description = RedactorField(
+        allow_file_upload=False,
+        redactor_options={
+            'lang': 'en',
+            'focus': 'true',
+            'buttons': [
+                'formatting', 'bold', 'italic',
+                'unorderedlist', 'orderedlist', 'outdent',
+                'indent', 'image', 'link', 'alignment',
+                'horizontalrule',
+            ]
+        }
+    )
+    publish = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title
+
+    # this will be an error in /admin
+    # def get_absolute_url(self):
+    #    return reverse("page_detail", kwargs={"slug": self.slug})
+
+    class Meta:
+        verbose_name = "Detail Page"
+        verbose_name_plural = "Pages"
+        ordering = ["-created"]
+
+
+class Gallery(TimeStampedModel):
+    title = models.CharField(max_length=200)
+    attachment = models.FileField(upload_to='gallery/attachment/%Y/%m/%d')
+
+    def __str__(self):
+        return self.title
+
+    def check_if_image(self):
+        if self.attachment.name.split('.')[-1].lower() \
+                in ['jpg', 'jpeg', 'gif', 'png']:
+            return ('<img height="40" width="60" src="%s"/>' % self.attachment.url)
+        return ('<img height="40" width="60" src="/static/assets/icons/file-icon.png"/>')
+    check_if_image.short_description = 'Attachment'
+    check_if_image.allow_tags = True
+
+    class Meta:
+        verbose_name = 'Detail Gallery'
+        verbose_name_plural = 'Galleries'
+        ordering = ['-created']
+
+
+class Visitor(TimeStampedModel):
+    post = models.ForeignKey(Post, related_name='post_visitor')
     ip = models.CharField(max_length=40)
-    session = models.CharField(max_length=40, null=True)
-    created = models.DateTimeField(default=datetime.datetime.now())
 
-    def __unicode__(self):
-        return self.entry.title
+    def __str__(self):
+        return self.post.title
 
     class Meta:
-        verbose_name_plural = "Entry Views"
-        ordering = ["-created"]
+        verbose_name = 'Detail Visitor'
+        verbose_name_plural = 'Visitors'
+        ordering = ['-created']

@@ -1,24 +1,53 @@
 from django.contrib import admin
 from django import forms
 from django.db.models import TextField
-from ckeditor.widgets import CKEditorWidget
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import capfirst
+
+# Integrating model `Post` to can import and export the data.
+# See this docs: https://goo.gl/QR3Qqp
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+from suit.widgets import AutosizedTextarea
 from blog.models import *
 
+
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('user', 'website', 'about')
+    search_fields = ['user__username', 'user__email', 'about']
+    list_filter = ['user__is_active', 'user__is_staff', 'user__is_superuser']
+
+
+class TagResource(resources.ModelResource):
+
+    class Meta:
+        model = Tag
+
+
+class TagAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = TagResource
+    list_display = ('title', 'slug')
+    prepopulated_fields = {'slug': ('title',)}
+
+
 class TagAdminForm(forms.ModelForm):
+    meta_description = forms.CharField(
+        required=False,
+        widget=AutosizedTextarea(
+            attrs={'rows': 3, 'class': 'input-xlarge'}))
+
     tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(), 
+        queryset=Tag.objects.all(),
         required=False,
         widget=FilteredSelectMultiple(
             verbose_name=_('Tags'),
             is_stacked=False
-            )
         )
+    )
 
     class Meta:
-        model = Entry
+        model = Post
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
@@ -28,70 +57,68 @@ class TagAdminForm(forms.ModelForm):
             self.fields['tags'].initial = self.instance.tags.all()
 
     def save(self, commit=True):
-        entry = super(TagAdminForm, self).save(commit=False)
+        post = super(TagAdminForm, self).save(commit=False)
         if commit:
-            entry.save()
+            post.save()
 
-        if entry.pk:
-            entry.tags = self.cleaned_data['tags']
+        if post.pk:
+            post.tags = self.cleaned_data['tags']
             self.save_m2m()
-        return entry
+        return post
 
 
-class AuthorAdmin(admin.ModelAdmin):
-    list_display = ("name", "email", "website", "about")
+class PostResource(resources.ModelResource):
 
-class EntryAdmin(admin.ModelAdmin):
+    class Meta:
+        model = Post
+
+
+class PostAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = PostResource
     form = TagAdminForm
-    list_display = ("title", "author", "created", "visit_on_site")
-    prepopulated_fields = {"slug": ("title",)}
-    search_fields=['title', 'body']
-    list_filter = ['author__name', 'created']
+    list_display = ('title', 'author', 'created', 'modified', 'publish')
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ['title', 'description', 'author__user__username']
+    list_filter = ['publish', 'author__user__username', 'created']
     list_per_page = 20
-    formfield_overrides = {TextField: {'widget': CKEditorWidget}}
-    fieldsets = (
-            ('', {
-                'fields': (
-                            'title', 'slug', 'cover',
-                            ('author', 'publish'),
-                            'keywords', 'tags', 'body'),
-            }),
-        )
-        
-class GalleryAdmin(admin.ModelAdmin):
-    list_display = ("file_type", "title", "get_absolute_url", "created")
-    search_fields= ['title']
-    list_filter = ['created']
-    list_per_page = 20
-    formfield_overrides = {TextField: {'widget': CKEditorWidget}}
+
 
 class PageAdmin(admin.ModelAdmin):
-    list_display = ("title", "author", "created", "visit_on_site") #"status", 
-    prepopulated_fields = {"slug": ("title",)}
-    search_fields=['title', 'body']
-    list_filter = ['author__name', 'created']
+    list_display = ('title', 'author', 'created', 'modified', 'publish')
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ['title', 'description', 'author__user__username']
+    list_filter = ['publish', 'author__user__username', 'created']
     list_per_page = 20
-    formfield_overrides = {TextField: {'widget': CKEditorWidget}}
-    fieldsets = (
-            ('', {
-                'fields': (
-                            'title', 'slug',
-                            ('author', 'publish'),
-                            'body'),
-            }),
-        )
 
-class TagAdmin(admin.ModelAdmin):
-    list_per_page = 10
 
-class Entry_Views_Admin(admin.ModelAdmin):
-    list_display = ("entry", "ip", "session", "created")
+class GalleryResource(resources.ModelResource):
+
+    class Meta:
+        model = Gallery
+
+
+class GalleryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = GalleryResource
+    list_display = ('check_if_image', 'title', 'created', 'modified')
+    search_fields = ['title']
+    list_filter = ['created']
     list_per_page = 20
+
+
+class VisitorResource(resources.ModelResource):
+
+    class Meta:
+        model = Visitor
+
+
+class VisitorAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = VisitorResource
+    list_display = ('post', 'ip', 'created', 'modified')
 
 
 admin.site.register(Author, AuthorAdmin)
-admin.site.register(Entry, EntryAdmin)
-admin.site.register(Gallery, GalleryAdmin)
-admin.site.register(Page, PageAdmin)
 admin.site.register(Tag, TagAdmin)
-admin.site.register(Entry_Views, Entry_Views_Admin)
+admin.site.register(Post, PostAdmin)
+admin.site.register(Page, PageAdmin)
+admin.site.register(Gallery, GalleryAdmin)
+admin.site.register(Visitor, VisitorAdmin)

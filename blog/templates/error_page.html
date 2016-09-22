@@ -1,9 +1,149 @@
-{% extends "base.html" %}
-{% block title %}{{ title }} - {{ block.super }} {% endblock %}
+<!DOCTYPE html>
+<html class="no-js" lang="en-US" prefix="og: http://ogp.me/ns#">
+<head>
+<script type='text/javascript'>
+(function() { var b=window,f="chrome",g="tick",k="jstiming";(function(){function d(a){this.t={};this.tick=function(a,d,c){var e=void 0!=c?c:(new Date).getTime();this.t[a]=[e,d];if(void 0==c)try{b.console.timeStamp("CSI/"+a)}catch(h){}};this[g]("start",null,a)}var a;b.performance&&(a=b.performance.timing);var n=a?new d(a.responseStart):new d;b.jstiming={Timer:d,load:n};if(a){var c=a.navigationStart,h=a.responseStart;0<c&&h>=c&&(b[k].srt=h-c)}if(a){var e=b[k].load;0<c&&h>=c&&(e[g]("_wtsrt",void 0,c),e[g]("wtsrt_","_wtsrt",h),e[g]("tbsd_","wtsrt_"))}try{a=null,
+b[f]&&b[f].csi&&(a=Math.floor(b[f].csi().pageT),e&&0<c&&(e[g]("_tbnd",void 0,b[f].csi().startE),e[g]("tbnd_","_tbnd",c))),null==a&&b.gtbExternal&&(a=b.gtbExternal.pageT()),null==a&&b.external&&(a=b.external.pageT,e&&0<c&&(e[g]("_tbnd",void 0,b.external.startE),e[g]("tbnd_","_tbnd",c))),a&&(b[k].pt=a)}catch(p){}})();b.tickAboveFold=function(d){var a=0;if(d.offsetParent){do a+=d.offsetTop;while(d=d.offsetParent)}d=a;750>=d&&b[k].load[g]("aft")};var l=!1;function m(){l||(l=!0,b[k].load[g]("firstScrollTime"))}b.addEventListener?b.addEventListener("scroll",m,!1):b.attachEvent("onscroll",m);
+ })();
+</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="NONE,NOARCHIVE" />
+    <title>{{ title }} - Python Learning</title>
 
-{% block blog_entries %}
-    <p>{{ message }}</p>
-{% endblock %}
-
-{% block widget_sidebar %}
-{% endblock %}
+    <!-- https://codepen.io/nelsontaleite/pen/Xdpqyb -->
+    <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <style type="text/css">
+    @keyframes floating {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      45% {
+        transform: translate3d(0, -10%, 0);
+      }
+      55% {
+        transform: translate3d(0, -10%, 0);
+      }
+      100% {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+    @keyframes floatingShadow {
+      0% {
+        transform: scale(1);
+      }
+      45% {
+        transform: scale(0.85);
+      }
+      55% {
+        transform: scale(0.85);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    body {
+      background-color: #f7f7f7;
+    }
+    .container__boo {
+      font-family: 'Varela Round', sans-serif;
+      color: #9b9b9b;
+      position: relative;
+      height: 90vh;
+      text-align: center;
+      font-size: 16px;
+    }
+    .container__boo h1 {
+      font-size: 32px;
+      margin-top: 32px;
+    }
+    .boo-wrapper {
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+    .boo {
+      width: 160px;
+      height: 184px;
+      background-color: #f7f7f7;
+      margin-left: auto;
+      margin-right: auto;
+      border: 3.39394px solid #9b9b9b;
+      border-bottom: 0;
+      overflow: hidden;
+      border-radius: 80px 80px 0 0;
+      box-shadow: -16px 0 0 2px rgba(234, 234, 234, 0.5) inset;
+      position: relative;
+      padding-bottom: 32px;
+      animation: floating 3s ease-in-out infinite;
+    }
+    .boo::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: -18.82353px;
+      bottom: -8.31169px;
+      width: calc(100% + 32px);
+      height: 32px;
+      background-repeat: repeat-x;
+      background-size: 32px 32px;
+      background-position: left bottom;
+      background-image: linear-gradient(-45deg, #f7f7f7 16px, transparent 0), linear-gradient(45deg, #f7f7f7 16px, transparent 0), linear-gradient(-45deg, #9b9b9b 18.82353px, transparent 0), linear-gradient(45deg, #9b9b9b 18.82353px, transparent 0);
+    }
+    .boo .face {
+      width: 24px;
+      height: 3.2px;
+      border-radius: 5px;
+      background-color: #9b9b9b;
+      position: absolute;
+      left: 50%;
+      bottom: 56px;
+      transform: translateX(-50%);
+    }
+    .boo .face::before, .boo .face::after {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      background-color: #9b9b9b;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 40px;
+    }
+    .boo .face::before {
+      left: -24px;
+    }
+    .boo .face::after {
+      right: -24px;
+    }
+    .shadow {
+      width: 128px;
+      height: 16px;
+      background-color: rgba(234, 234, 234, 0.75);
+      margin-top: 40px;
+      margin-right: auto;
+      margin-left: auto;
+      border-radius: 50%;
+      animation: floatingShadow 3s ease-in-out infinite;
+    }
+    </style>
+</head>
+<body>
+<div class="container__boo">
+  <div class="boo-wrapper">
+    <div class="boo">
+      <div class="face"></div>
+    </div>
+    <div class="shadow"></div>
+    <h1>Whoops!</h1>
+    <p>
+      You have an error {{ message }}.
+    </p>
+  </div>
+</div>
+</body>

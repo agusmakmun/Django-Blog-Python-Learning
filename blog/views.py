@@ -1,31 +1,66 @@
+import time
 import datetime
-from django.db.models import Q
+import socket
 from django.views import generic
-from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.core.mail import send_mail, BadHeaderError
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.template import loader, Context, RequestContext
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from blog.models import Entry, Tag, Author, Page
-from blog.forms import ContactForm
+from django.shortcuts import (render, render_to_response, redirect, get_object_or_404)
+from django.core.mail import (send_mail, BadHeaderError)
+from django.core.exceptions import ObjectDoesNotExist
+from django.template import RequestContext
+from django.conf import settings
+from django.db.models import (Q, Count)
 
-class BlogIndex(generic.ListView):
-    queryset = Entry.objects.published()
-    template_name = "blog/blog_home.html"
-    paginate_by = 10
+from blog.models import *
+from blog.forms import ContactForm
+from blog.utils.paginator import GenericPaginator
+
+
+def handler400(request):
+    response = render_to_response('error_page.html', {'title': '400 Bad Request', 'message': '400'},
+                                  context_instance=RequestContext(request, {'message': '400'}))
+    response.status_code = 400
+    return response
+
+
+def handler403(request):
+    response = render_to_response('error_page.html', {'title': '403 Permission Denied', 'message': '403'},
+                                  context_instance=RequestContext(request, {'message': '403'}))
+    response.status_code = 403
+    return response
+
+
+def handler404(request):
+    response = render_to_response('error_page.html', {'title': '404 Not Found', 'message': '404'},
+                                  context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
+
+
+def handler500(request):
+    response = render_to_response('error_page.html', {'title': '500 Server Error', 'message': '500'},
+                                  context_instance=RequestContext(request, {'message': '500'}))
+    response.status_code = 500
+    return response
+
+
+class HomepageView(generic.ListView):
+    queryset = Post.objects.published()
+    template_name = 'blog/blog_home.html'
+    paginate_by = 7
 
     def get_context_data(self, **kwargs):
-        context_data = super(BlogIndex, self).get_context_data(**kwargs)
-        alltags = Tag.objects.all()
-        queryset = Entry.objects.published()
-        context_data['alltags'] = alltags
-        context_data['recent_posts'] = queryset[:5] #limitation for recent posts
+        context_data = super(HomepageView, self).get_context_data(**kwargs)
+        context_data['page_range'] = GenericPaginator(
+            self.queryset,
+            self.paginate_by,
+            self.request.GET.get('page')
+        ).get_page_range()
         return context_data
 
-class BlogDetail(generic.DetailView):
-    model = Entry
-    template_name = "blog/blog_post.html"
+
+class DetailPostView(generic.DetailView):
+    model = Post
+    template_name = 'blog/blog_detail.html'
 
     def get_client_ip(self):
         ip = self.request.META.get("HTTP_X_FORWARDED_FOR", None)
@@ -35,162 +70,216 @@ class BlogDetail(generic.DetailView):
             ip = self.request.META.get("REMOTE_ADDR", "")
         return ip
 
-    def tracking_hit_post(self):
-        entry = self.model.objects.get(pk=self.object.id)
-
+    def visitorCounter(self):
         try:
-            Entry_Views.objects.get(entry=entry, ip=self.get_client_ip(), session=self.request.session.session_key)
+            Visitor.objects.get(post=self.object, ip=self.request.META['REMOTE_ADDR'])
         except ObjectDoesNotExist:
-            import socket
-            dns = str(socket.getfqdn(str(self.get_client_ip()))).split('.')[-1]
+            dns = str(socket.getfqdn(self.request.META['REMOTE_ADDR'])).split('.')[-1]
             try:
-                if int(dns):
-                        view = Entry_Views(entry=entry, 
-                                    ip=self.request.META['REMOTE_ADDR'],
-                                    created=datetime.datetime.now(),
-                                    session=self.request.session.session_key)
-                        view.save()
-                    else: pass
-                except ValueError: pass
-        except MultipleObjectsReturned: pass
-        return Entry_Views.objects.filter(entry=entry).count()
+                # trying for localhost: str(dns) == 'localhost',
+                # trying for productions: int(dns)
+                if str(dns) == 'localhost':
+                    visitor = Visitor(
+                        post=self.object,
+                        ip=self.request.META['REMOTE_ADDR']
+                    )
+                    visitor.save()
+                else:
+                    pass
+            except ValueError:
+                pass
+        return Visitor.objects.filter(post=self.object).count()
 
     def get_context_data(self, **kwargs):
-        context_data = super(BlogDetail, self).get_context_data(**kwargs)
-        related_entries = Entry.objects.filter(
+        context_data = super(DetailPostView, self).get_context_data(**kwargs)
+        related_posts = Post.objects.filter(
             tags__in=list(self.object.tags.all())
-            ).exclude(id=self.object.id)
-        queryset = Entry.objects.published()
-        alltags = Tag.objects.all()
-
-        context_data['get_client_ip'] = self.get_client_ip
-        context_data['tracking_hit_post'] = self.tracking_hit_post()
-        context_data['alltags'] = alltags
-        context_data['count_tags'] = related_entries.count
-        context_data['related_entries'] = related_entries[:5] #limitation for post
-        context_data['recent_posts'] = queryset[:5] #limitation for recent posts
+        ).exclude(id=self.object.id)
+        context_data['related_posts'] = related_posts[:5]  # limit for post
+        context_data['get_client_ip'] = self.get_client_ip()
+        context_data['visitor_counter'] = self.visitorCounter()
         return context_data
 
-class PageDetail(generic.DetailView):
+
+class SearchPostsView(generic.ListView):
+    template_name = 'blog/blog_search.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        self.query = self.request.GET.get('q')
+        try:
+            search_posts = Post.objects.published().filter(
+                Q(title__icontains=self.query) |
+                Q(description__icontains=self.query) |
+                Q(keywords__icontains=self.query) |
+                Q(meta_description__icontains=self.query)
+            ).order_by('-created').order_by('-id')
+            return search_posts
+        except:
+            return Post.objects.published()
+
+    def get_context_data(self, **kwargs):
+        context_data = super(SearchPostsView, self).get_context_data(**kwargs)
+        context_data['query'] = self.query
+        context_data['page_range'] = GenericPaginator(
+            self.get_queryset(),
+            self.paginate_by,
+            self.request.GET.get('page')
+        ).get_page_range()
+        return context_data
+
+
+class AuthorPostsView(generic.ListView):
+    template_name = 'blog/blog_posts_author.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        username = self.kwargs['username']
+        self.author = get_object_or_404(Author, user__username=username)
+        posts_author = Post.objects.published().filter(
+            author=self.author
+        ).order_by('-created').order_by('-id')
+        return posts_author
+
+    def get_context_data(self, **kwargs):
+        context_data = super(AuthorPostsView, self).get_context_data(**kwargs)
+        context_data['author'] = self.author
+        context_data['page_range'] = GenericPaginator(
+            self.get_queryset(),
+            self.paginate_by,
+            self.request.GET.get('page')
+        ).get_page_range()
+        return context_data
+
+
+class TagPostsView(generic.ListView):
+    template_name = 'blog/blog_posts_tag.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        self.tag = get_object_or_404(Tag, slug=slug)
+        results_filter = Post.objects.published().filter(
+            tags=self.tag
+        ).order_by('-created').order_by('-id')
+        return results_filter
+
+    def get_context_data(self, **kwargs):
+        context_data = super(TagPostsView, self).get_context_data(**kwargs)
+        context_data['tag'] = self.tag
+        context_data['page_range'] = GenericPaginator(
+            self.get_queryset(),
+            self.paginate_by,
+            self.request.GET.get('page')
+        ).get_page_range()
+        return context_data
+
+
+class DetailPageView(generic.DetailView):
     model = Page
-    template_name = "blog/blog_pages.html"
+    template_name = 'blog/blog_page.html'
 
-def about(request):
-    return render(request, 'blog/blog_about.html', {
-        'site_name': 'python.web.id',
-        'title':'About - Python Learning'
-        })
 
-def resource(request):
-    return render(request, 'blog/blog_resource.html', {
-        'site_name': 'python.web.id',
-        'title':'Resource - Python Learning'
-        })
+class SitemapView(generic.ListView):
+    queryset = Post.objects.published()
+    template_name = 'blog/blog_sitemap.html'
+    paginate_by = 30
 
-def contact(request):
-    if request.method == 'GET':
-        form = ContactForm()
-    else:
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            subject = form.cleaned_data['subject']
-            from_email = form.cleaned_data['from_email']
-            message = form.cleaned_data['message']
+    def get_context_data(self, **kwargs):
+        context_data = super(SitemapView, self).get_context_data(**kwargs)
+        context_data['page_range'] = GenericPaginator(
+            self.queryset,
+            self.paginate_by,
+            self.request.GET.get('page')
+        ).get_page_range()
+        return context_data
+
+
+class ContactView(generic.TemplateView):
+    template_name = 'blog/blog_contact.html'
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        if context['form'].is_valid():
+            cd = context['form'].cleaned_data
+            subject = cd['subject']
+            from_email = cd['email']
+            message = cd['message']
+
             try:
-                send_mail(subject, message, from_email, ['your_email@gmail.com'])
+                send_mail(
+                    subject + " from {}".format(from_email),
+                    message,
+                    from_email,
+                    [settings.EMAIL_HOST_USER]
+                )
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
-            return redirect('contact')
-    return render(request, "blog/blog_contact.html", {'form': form})
 
-def my_sitemap(request):
-    t = loader.get_template('blog/blog_sitemap.html')
-    all_entry = Entry.objects.all()
-    paginator = Paginator(all_entry, 20) #show 10 articles per page
-    page = request.GET.get('page')
-    try:
-        all_entry = paginator.page(page)
-    except PageNotAnInteger:
-        all_entry = paginator.page(1)
-    except EmptyPage:
-        all_entry = paginator.page(paginator.num_pages)
-    index = all_entry.number - 1
-    limit = 5 #limit for show range left and right of number pages
-    max_index = len(paginator.page_range)
-    start_index = index - limit if index >= limit else 0
-    end_index = index + limit if index <= max_index - limit else max_index
-    page_range = paginator.page_range[start_index:end_index]
-    
-    c = Context({'all_entry':all_entry, 'page_range': page_range, })
-    return HttpResponse(t.render(c))
+            ctx = {
+                'success': """Thankyou, We appreciate that you've
+                taken the time to write us.
+                We'll get back to you very soon.
+                Please come back and see us often."""
+            }
+            return render(request, self.template_name, ctx)
+        return super(generic.TemplateView, self).render_to_response(context)
 
-def search(request):
-    query = request.GET['q']
-    t = loader.get_template('blog/blog_search.html')
-    results = Entry.objects.filter(
-                                    Q(title__icontains=query) | \
-                                    Q(body__icontains=query) | \
-                                    Q(keywords__icontains=query)\
-                                ).order_by('-created').order_by('-id')
-    paginator = Paginator(results, 10) #show 10 articles per page
-    page = request.GET.get('page')
-    try:
-        results = paginator.page(page)
-    except PageNotAnInteger:
-        results = paginator.page(1)
-    except EmptyPage:
-        results = paginator.page(paginator.num_pages)
-    index = results.number - 1
-    limit = 3 #limit for show range left and right of number pages
-    max_index = len(paginator.page_range)
-    start_index = index - limit if index >= limit else 0
-    end_index = index + limit if index <= max_index - limit else max_index
-    page_range = paginator.page_range[start_index:end_index]
-    
-    c = Context({ 'query': query, 'results':results, 'page_range': page_range, })
-    return HttpResponse(t.render(c))
+    def get_context_data(self, **kwargs):
+        context = super(ContactView, self).get_context_data(**kwargs)
+        form = ContactForm(self.request.POST or None)
+        context['form'] = form
+        return context
 
-def displayArticleUnderAuthor(request, pk):
-    t = loader.get_template('blog/blog_posts_author.html')
-    author = Author.objects.get(pk = pk)
-    articles = Entry.objects.filter(author = author.id)
-    paginator = Paginator(articles, 10) #show 10 articles per page
-    page = request.GET.get('page')
-    try:
-        articles_list = paginator.page(page)
-    except PageNotAnInteger:
-        articles_list = paginator.page(1)
-    except EmptyPage:
-        articles_list = paginator.page(paginator.num_pages)
-    index = articles_list.number - 1
-    limit = 3 #limit for show range left and right of number pages
-    max_index = len(paginator.page_range)
-    start_index = index - limit if index >= limit else 0
-    end_index = index + limit if index <= max_index - limit else max_index
-    page_range = paginator.page_range[start_index:end_index]
 
-    c = Context({ "articles_author" : articles_list, "post_author" : pk, 
-                  "author_name": author.name, 'page_range': page_range,})
-    return HttpResponse(t.render(c))
+class TrendingPostsView(generic.ListView):
+    template_name = 'blog/blog_trending_posts.html'
 
-def displayAllArticlesUnderTage(request, tag_slug):
-    t = loader.get_template('blog/blog_tags.html')
-    tag = Tag.objects.get(slug = tag_slug)
-    articles = Entry.objects.filter(tags = tag.id)
-    paginator = Paginator(articles, 10) #show 10 articles per page
-    page = request.GET.get('page')
-    try:
-        articles_list = paginator.page(page)
-    except PageNotAnInteger:
-        articles_list = paginator.page(1)
-    except EmptyPage:
-        articles_list = paginator.page(paginator.num_pages)
-    index = articles_list.number - 1
-    limit = 3 #limit for show range left and right of number pages
-    max_index = len(paginator.page_range)
-    start_index = index - limit if index >= limit else 0
-    end_index = index + limit if index <= max_index - limit else max_index
-    page_range = paginator.page_range[start_index:end_index]
+    def get_queryset(self):
+        posts = Post.objects.published()
+        top_posts = Visitor.objects.filter(post__in=posts)\
+            .values('post').annotate(visit=Count('post__id'))\
+            .order_by('-visit')
 
-    c = Context({ "articles" : articles_list, "tag_slug" : tag_slug, 'page_range': page_range,})
-    return HttpResponse(t.render(c))
+        list_pk_top_posts = [pk['post'] for pk in top_posts[:20]]  # Return 20 posts only
+        filter_posts = list(Post.objects.published().filter(pk__in=list_pk_top_posts))
+        sorted_posts = sorted(filter_posts, key=lambda i: list_pk_top_posts.index(i.pk))
+
+        self.get_filter = self.request.GET.get('filter')
+        now_year = time.strftime("%Y")
+        now_month = time.strftime("%m")
+        now_date = datetime.date.today()
+        start_week = now_date - datetime.timedelta(now_date.weekday())
+        end_week = start_week + datetime.timedelta(7)
+
+        if self.get_filter == 'week':
+            filter_posts = list(Post.objects.published()
+                                .filter(pk__in=list_pk_top_posts)
+                                .filter(created__range=[start_week, end_week])
+                                )
+            sorted_posts = sorted(filter_posts, key=lambda i: list_pk_top_posts.index(i.pk))
+
+        elif self.get_filter == 'month':
+            filter_posts = list(Post.objects.published()
+                                .filter(pk__in=list_pk_top_posts)
+                                .filter(created__month=now_month)
+                                .filter(created__year=now_year)
+                                )
+            sorted_posts = sorted(filter_posts, key=lambda i: list_pk_top_posts.index(i.pk))
+
+        elif self.get_filter == 'year':
+            filter_posts = list(Post.objects.published()
+                                .filter(pk__in=list_pk_top_posts)
+                                .filter(created__year=now_year)
+                                )
+            sorted_posts = sorted(filter_posts, key=lambda i: list_pk_top_posts.index(i.pk))
+
+        else:
+            self.get_filter == 'global'
+            sorted_posts = sorted_posts
+        return sorted_posts
+
+    def get_context_data(self, **kwargs):
+        context_data = super(TrendingPostsView, self).get_context_data(**kwargs)
+        context_data['filter'] = self.get_filter
+        return context_data

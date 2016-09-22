@@ -1,3 +1,16 @@
+### v.3.5
+* Implement Standard [PEP8](https://www.python.org/dev/peps/pep-0008/) for Python.
+* Implement CBV (Class Bassed View).
+* Migrated to [Python 3.5](https://docs.python.org/3/)
+* Migrated to [Django 1.10](https://docs.djangoproject.com/en/1.10/)
+* Migrated [Django wp-admin](https://github.com/barszczmm/django-wpadmin) to [Django suit](https://github.com/darklow/django-suit).
+* Migrated [Django Ckeditor](https://github.com/django-ckeditor/django-ckeditor) to [Django Redactor](https://github.com/douglasmiranda/django-wysiwyg-redactor).
+* Added [Django nocaptcha recaptcha](https://github.com/ImaginaryLandscape/django-nocaptcha-recaptcha) for contact form.
+* Added Page for tranding posts by visit.
+* Added Feature export and import using [Django Import Export](https://github.com/django-import-export/django-import-export)
+* Changed Gallery Upload to only once attachment field.
+* Added custom template for Error page, and much more...
+
 ### v.3.4
 
 * Fixed MultipleObjectsReturned

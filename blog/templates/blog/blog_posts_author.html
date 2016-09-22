@@ -1,51 +1,6 @@
-{% extends "base.html" %}
-{% block title %}Post Under Author: {{ author_name }} - {{ block.super }}{% endblock %}
-{% block canonical_url %}{{ block.super }}/author/{{ post_author }}{% endblock %}
-
-{% block blog_entries %}
-  <div class="post">
-    <p class="result-me">Post Under Author: <i>"{{ author_name }}"</i></p>
-      {% if post_author %}
-         {% for obj in articles_author %}
-            <div class="post">
-              <h2><a href="{% url "entry_detail" slug=obj.slug %}">{{ obj.title }}</a></h2>
-              <p class="meta">
-                Date: {{ obj.created }} - 
-                By: <a href="{% url 'author_page' pk=object.author.pk %}">{{ obj.author }}</a> - 
-                Tagged under: 
-                {% for tag in obj.tags.all %}
-                  <a href="{% url 'tag_page' tag_slug=tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-                {% endfor %}
-              </p>
-              {{ obj.body|safe|striptags|truncatewords:"20"|linebreaks }}
-              <span style="float:right">
-                <a href="{% url "entry_detail" slug=obj.slug %}">Read More &rarr;</a>
-              </span>
-              <div style="clear:both;border-bottom: 1px solid #F2F2F2;margin: 10px 0"></div>
-            </div>
-         {% endfor %}
-      {% endif %}
-  </div>
-<ul class="pagination">
-  <li {% if not articles_author.has_previous %}class="disabled"{% endif %}>
-     <a {% if articles_author.has_previous %}href="?page={{ articles_author.previous_page_number }}" aria-label="Previous" {% endif %}><span aria-hidden="true">&laquo;</span></a>
-   </li>
-   <li><a href="?page=1">First</a></li>
-  {% for linkpage in page_range %}
-      {% ifequal linkpage articles_author.number %}
-         <li class="active">
-           <a href="#">{{ articles_author.number }}<span class="sr-only">(current)</span></a>
-         </li>
-      {% else %}
-         <li><a href="?page={{ linkpage }}">{{ linkpage }}</a></li>
-      {% endifequal %}
-  {% endfor %}
-  <li><a href="?page={{ articles_author.paginator.num_pages }}">Last</a></li>
-  <li {% if not articles_author.has_next %}class="disabled"{% endif %}>
-     <a {% if articles_author.has_next %}href="?page={{ articles_author.next_page_number }}" aria-label="Next" {% endif %}><span aria-hidden="true">&raquo;</span></a>
-   </li>
-</ul>
-{% endblock %}
-
-{% block widget_sidebar %}
+{% extends "blog/blog_home.html" %}
+{% block title %}Posts under author {{ author }} - {{ block.super }}{% endblock %}
+{% block canonical_url %}https://{{ request.get_host }}{% url 'author_posts_page' username=author.user.username %}{% endblock %}
+{% block message_info_homepage %}
+  <p class="message__info">Post under author: <i>"{{ author }}"</i></p>
 {% endblock %}

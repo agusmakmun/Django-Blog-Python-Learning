@@ -1,0 +1,15 @@
+diff-match-patch==20121119
+Django==1.10.1
+django-disqus==0.5
+django-import-export==0.5.0
+django-nocaptcha-recaptcha==0.0.19
+django-suit==0.2.21
+django-wysiwyg-redactor==0.4.9.1
+mock==2.0.0
+pbr==1.10.0
+Pillow==3.3.1
+pkg-resources==0.0.0
+psycopg2==2.6.2
+pytz==2016.6.1
+six==1.10.0
+tablib==0.11.2
