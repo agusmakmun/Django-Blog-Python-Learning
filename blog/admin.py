@@ -5,7 +5,7 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import capfirst
 
-# Integrating model `Post` to can import and export the data.
+# Integrating the model to can import and export the data via admin dashboard.
 # See this docs: https://goo.gl/QR3Qqp
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin

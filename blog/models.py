@@ -44,7 +44,7 @@ class Tag(models.Model):
 
     @property
     def get_total_posts(self):
-        return Packet.objects.filter(tags__pk=self.pk).count()
+        return Post.objects.filter(tags__pk=self.pk).count()
 
     class Meta:
         verbose_name = 'Detail Tag'

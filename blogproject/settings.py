@@ -123,6 +123,14 @@ DATABASES = {
 }
 """
 
+# Config with postgresql - psql (9.5.4, server 9.3.14)
+# $ sudo su - postgres
+# $ psql
+# postgres=# CREATE DATABASE database_nme;
+# postgres=# CREATE USER database_user WITH PASSWORD 'password_user';
+# postgres=# GRANT ALL PRIVILEGES ON DATABASE database_nme TO database_user;
+# See this docs for more; https://goo.gl/9ONJKX
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -168,14 +176,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
-    '/home/path/to/yourenv/blogproject/static',
+    '/path/to/yourenv/blogproject/static',
 )
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = '/home/path/to/yourenv/blogproject/static'
+#STATIC_ROOT = '/path/to/yourenv/blogproject/static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/home/path/to/yourenv/blogproject/media'
+MEDIA_ROOT = '/path/to/yourenv/blogproject/media'
 
 # Editor Redactor
 import time

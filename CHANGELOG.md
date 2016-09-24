@@ -9,7 +9,7 @@
 * Added Page for tranding posts by visit.
 * Added Feature export and import using [Django Import Export](https://github.com/django-import-export/django-import-export)
 * Changed Gallery Upload to only once attachment field.
-* Added custom template for Error page, and much more...
+* Added custom template for Error page, Maintenance mode, and much more...
 
 ### v.3.4
 

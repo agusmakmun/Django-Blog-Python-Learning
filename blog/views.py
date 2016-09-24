@@ -46,7 +46,7 @@ def handler500(request):
 class HomepageView(generic.ListView):
     queryset = Post.objects.published()
     template_name = 'blog/blog_home.html'
-    paginate_by = 7
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context_data = super(HomepageView, self).get_context_data(**kwargs)
@@ -77,7 +77,7 @@ class DetailPostView(generic.DetailView):
             dns = str(socket.getfqdn(self.request.META['REMOTE_ADDR'])).split('.')[-1]
             try:
                 # trying for localhost: str(dns) == 'localhost',
-                # trying for productions: int(dns)
+                # trying for production: int(dns)
                 if str(dns) == 'localhost':
                     visitor = Visitor(
                         post=self.object,

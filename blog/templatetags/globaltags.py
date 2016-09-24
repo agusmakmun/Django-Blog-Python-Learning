@@ -35,4 +35,4 @@ def populartags():
 @register.assignment_tag
 def recentposts():
     posts = Post.objects.published()
-    return posts
+    return posts[:5]

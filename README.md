@@ -44,7 +44,7 @@ $ git clone git@github.com:agusmakmun/Django-Blog-Python-Learning.git
 > If you getting an error, `error: command 'i686-linux-gnu-gcc' failed with exit status 1`
 > please install first the python3-dev
 > using command `sudo apt-get install python3-dev` for all-deb, or use different method.
-> This probelm specialy for `pip3 install psycopg2`
+> This probelm specialy for `pip3 install psycopg2`. 
 > For more, please checkout this answer: http://stackoverflow.com/a/11094752/6396981
 
 ```
@@ -108,4 +108,4 @@ $ ./manage.py runserver
 
 ### License
 
-* [MIT](LICENSE)
+* [GPL-2.0](LICENSE)

@@ -19,6 +19,9 @@ info_dict = {
 # thanks to: http://stackoverflow.com/a/30271379/6396981
 
 urlpatterns = [
+    # Handler for Maintenance mode.
+    # url(r'^$', TemplateView.as_view(template_name='maintenance.html', content_type='text/html')),
+
     url(r'^$', HomepageView.as_view(), name='homepage'),
     url(r'^blog/(?P<slug>[\w\-]+)/$', DetailPostView.as_view(), name='detail_post_page'),
     url(r'^search/$', SearchPostsView.as_view(), name='search_posts_page'),
