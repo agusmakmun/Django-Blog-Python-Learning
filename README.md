@@ -1,7 +1,7 @@
 Django-Blog-Python-Learning
 -------
 
-Release Source Code of Django Blog Python Learning v.3.5
+Release Source Code of Django Blog Python Learning v.3.6
 
 ### Demo:
 - [https://python.web.id](https://python.web.id)
@@ -20,6 +20,7 @@ Release Source Code of Django Blog Python Learning v.3.5
 - Contact form.
 - About author in the botom of posts.
 - Visitor Counter
+- Auto backup to the json file
 - much more...
 
 ### Instalation
@@ -103,7 +104,7 @@ $ ./manage.py runserver
 
 ### ChangeLog
 
-* [CHANGELOG](CHANGELOG.md#v35)
+* [CHANGELOG](CHANGELOG.md#v36)
 
 
 ### License
