@@ -90,6 +90,17 @@ class DetailPostView(generic.DetailView):
                 pass
         return Visitor.objects.filter(post=self.object).count()
 
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.publish == False and \
+                request.user.is_anonymous() or \
+                request.user != obj.author.user:
+            return redirect('homepage')
+        else:
+            return super(DetailPostView, self).dispatch(
+                request, *args, **kwargs
+            )
+
     def get_context_data(self, **kwargs):
         context_data = super(DetailPostView, self).get_context_data(**kwargs)
         related_posts = Post.objects.filter(

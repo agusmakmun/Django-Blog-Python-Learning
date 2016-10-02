@@ -31,7 +31,7 @@
 
 {% block content %}
   <div class="post" id="printable">
-    <h2><a href="{% url "detail_post_page" slug=object.slug %}">{{ object.title }}</a></h2>
+    <h2><a href="{% url "detail_post_page" slug=object.slug %}">{{ object.title }}</a>{% if object.publish == False %} <i class="badge">DRAF</i>{% endif %}</h2>
     <div class="meta">
       By: <a href="{% url 'author_posts_page' username=object.author.user.username %}" style="text-transform:uppercase">{{ object.author }}</a> &#9679;
       at {{ object.created }} &#9679; and modified at {{ object.modified }}<br />
@@ -120,4 +120,14 @@
     {% disqus_show_comments %}
     <!-- disqus_dev -->
   </div>
+
+  <link rel="stylesheet" href="{% static 'assets/css/highlight.css' %}">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('pre').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });
+  </script>
 {% endblock %}
