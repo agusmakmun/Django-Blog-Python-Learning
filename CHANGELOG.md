@@ -1,3 +1,7 @@
+### v.3.6
+* Added feature auto backup to the json file
+* Fixed typo, sidebar, detail, css, or else
+
 ### v.3.5
 * Implement Standard [PEP8](https://www.python.org/dev/peps/pep-0008/) for Python.
 * Implement CBV (Class Bassed View).
