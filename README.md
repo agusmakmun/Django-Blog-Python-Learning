@@ -104,7 +104,7 @@ $ ./manage.py runserver
 
 ### ChangeLog
 
-* [CHANGELOG](CHANGELOG.md#v36)
+* [CHANGELOG](CHANGELOG.md)
 
 
 ### License

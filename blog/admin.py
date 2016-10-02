@@ -19,7 +19,7 @@ class AuthorResource(resources.ModelResource):
         model = Author
 
 
-class AuthorAdmin(admin.ModelAdmin):
+class AuthorAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = AuthorResource
     list_display = ('user', 'website', 'about')
     search_fields = ['user__username', 'user__email', 'about']
@@ -96,7 +96,7 @@ class PageResource(resources.ModelResource):
         model = Page
 
 
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = PageResource
     list_display = ('title', 'author', 'created', 'modified', 'publish')
     prepopulated_fields = {'slug': ('title',)}
