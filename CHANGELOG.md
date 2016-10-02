@@ -1,5 +1,7 @@
 ### v.3.6
 * Added feature auto backup to the json file
+* Added feature highlight pre
+* Fixed draft post
 * Fixed typo, sidebar, detail, css, or else
 
 ### v.3.5
