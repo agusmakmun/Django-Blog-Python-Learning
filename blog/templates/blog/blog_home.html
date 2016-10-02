@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block content %}
   {% block message_info_homepage %}{% endblock %}
@@ -7,18 +8,19 @@
     <div class="post">
       <h2 class="title__bold"><a href="{% url 'detail_post_page' slug=object.slug %}">{{ object.title }}</a></h2>
       <p class="meta">
-        Created: {{ object.created }} -
-        By: <a href="{% url 'author_posts_page' username=object.author.user.username %}">{{ object.author }}</a> -
-        Tagged under:
+        By: <a href="{% url 'author_posts_page' username=object.author.user.username %}" style="text-transform:uppercase">{{ object.author }}</a> &#9679;
+        at {{ object.created }} &#9679;
+        Posted under:
         {% for tag in object.tags.all %}
-          <a href="{% url 'tag_posts_page' slug=tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+          <a href="{% url 'tag_posts_page' slug=tag.slug %}">#{{ tag }}</a>{% if not forloop.last %}, {% endif %}
         {% empty %}Uncategories
         {% endfor %}
       </p>
+
       {% if object.cover %}
         <div class="cst__cover__posts">
           <a href="{% url 'detail_post_page' slug=object.slug %}">
-            <img style="width:100%" src="/media/{{ object.cover }}" alt="{{ object.title }}">
+            <img style="width:100%" src="/media/{{ object.cover }}" alt="{{ object.title }}" title="{{ object.title }}">
           </a>
         </div>
       {% endif %}
@@ -36,21 +38,21 @@
     {% if request.GET.q %}
       <ul class="pagination">
         <li {% if not page_obj.has_previous %}class="disabled"{% endif %}>
-          <a {% if page_obj.has_previous %}href="?csrfmiddlewaretoken={{ csrf_token }}&amp;q={{ query }}&amp;page={{ page_obj.previous_page_number }}" aria-label="Previous" {% endif %}><span aria-hidden="true">&laquo;</span></a>
+          <a {% if page_obj.has_previous %}href="?q={{ query }}&amp;page={{ page_obj.previous_page_number }}" aria-label="Previous" {% endif %}><span aria-hidden="true">&laquo;</span></a>
         </li>
-        <li><a href="?csrfmiddlewaretoken={{ csrf_token }}&amp;q={{ query }}&amp;page=1">First</a></li>
+        <li><a href="?q={{ query }}&amp;page=1">First</a></li>
         {% for linkpage in page_range %}
         {% ifequal linkpage page_obj.number %}
         <li class="active">
           <a>{{ page_obj.number }}<span class="sr-only">(current)</span></a>
         </li>
         {% else %}
-        <li><a href="?csrfmiddlewaretoken={{ csrf_token }}&amp;q={{ query }}&amp;page={{ linkpage }}">{{ linkpage }}</a></li>
+        <li><a href="?q={{ query }}&amp;page={{ linkpage }}">{{ linkpage }}</a></li>
         {% endifequal %}
         {% endfor %}
-        <li><a href="?csrfmiddlewaretoken={{ csrf_token }}&amp;q={{ query }}&amp;page={{ page_obj.paginator.num_pages }}">Last</a></li>
+        <li><a href="?q={{ query }}&amp;page={{ page_obj.paginator.num_pages }}">Last</a></li>
         <li {% if not page_obj.has_next %}class="disabled"{% endif %}>
-          <a {% if page_obj.has_next %}href="?csrfmiddlewaretoken={{ csrf_token }}&amp;q={{ query }}&amp;page={{ page_obj.next_page_number }}" aria-label="Next" {% endif %}><span aria-hidden="true">&raquo;</span></a>
+          <a {% if page_obj.has_next %}href="?q={{ query }}&amp;page={{ page_obj.next_page_number }}" aria-label="Next" {% endif %}><span aria-hidden="true">&raquo;</span></a>
         </li>
       </ul>
     {% else %}

@@ -17,14 +17,14 @@ from blog.utils.paginator import GenericPaginator
 
 def handler400(request):
     response = render_to_response('error_page.html', {'title': '400 Bad Request', 'message': '400'},
-                                  context_instance=RequestContext(request, {'message': '400'}))
+                                  context_instance=RequestContext(request))
     response.status_code = 400
     return response
 
 
 def handler403(request):
     response = render_to_response('error_page.html', {'title': '403 Permission Denied', 'message': '403'},
-                                  context_instance=RequestContext(request, {'message': '403'}))
+                                  context_instance=RequestContext(request))
     response.status_code = 403
     return response
 
@@ -38,7 +38,7 @@ def handler404(request):
 
 def handler500(request):
     response = render_to_response('error_page.html', {'title': '500 Server Error', 'message': '500'},
-                                  context_instance=RequestContext(request, {'message': '500'}))
+                                  context_instance=RequestContext(request))
     response.status_code = 500
     return response
 
@@ -94,7 +94,7 @@ class DetailPostView(generic.DetailView):
         context_data = super(DetailPostView, self).get_context_data(**kwargs)
         related_posts = Post.objects.filter(
             tags__in=list(self.object.tags.all())
-        ).exclude(id=self.object.id)
+        ).exclude(id=self.object.id).distinct()
         context_data['related_posts'] = related_posts[:5]  # limit for post
         context_data['get_client_ip'] = self.get_client_ip()
         context_data['visitor_counter'] = self.visitorCounter()

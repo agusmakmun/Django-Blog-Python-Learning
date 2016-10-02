@@ -44,11 +44,11 @@
 </div>
 
 <div class="sidebar-module sidebar-module-inset">
-  <h4>All Tags</h4>
+  <h4>Entire Tags</h4>
   {% populartags as populartags_list %}
   {% for tag in populartags_list %}
-    <a class="btn btn-sm btn-default cst__radius cst__tags" href="{% url 'tag_posts_page' slug=tag.tag.slug %}">
-      {{ tag.tag.title }} <span class="badge">{{ tag.total }}</span>
+    <a class="btn btn-sm btn-block btn-default cst__radius cst__tags" href="{% url 'tag_posts_page' slug=tag.tag.slug %}">
+      {{ tag.tag.title }} <span class="badge pull-right">{{ tag.total }}</span>
     </a>
   {% empty %}
     <p>No tags yet!</p>
