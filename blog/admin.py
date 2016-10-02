@@ -13,7 +13,14 @@ from suit.widgets import AutosizedTextarea
 from blog.models import *
 
 
+class AuthorResource(resources.ModelResource):
+
+    class Meta:
+        model = Author
+
+
 class AuthorAdmin(admin.ModelAdmin):
+    resource_class = AuthorResource
     list_display = ('user', 'website', 'about')
     search_fields = ['user__username', 'user__email', 'about']
     list_filter = ['user__is_active', 'user__is_staff', 'user__is_superuser']
@@ -83,7 +90,14 @@ class PostAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_per_page = 20
 
 
+class PageResource(resources.ModelResource):
+
+    class Meta:
+        model = Page
+
+
 class PageAdmin(admin.ModelAdmin):
+    resource_class = PageResource
     list_display = ('title', 'author', 'created', 'modified', 'publish')
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title', 'description', 'author__user__username']
