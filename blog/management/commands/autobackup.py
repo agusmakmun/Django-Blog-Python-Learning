@@ -57,30 +57,55 @@ class Command(BaseCommand):
                 with open(filepath, 'w') as outfile:
                     json.dump(resources_set.json, outfile)
 
-                flastbackup = directory_backup + \
-                    '/last_backup_date_{}'.format(time.strftime("%d-%m-%Y"))
-                with open(flastbackup, 'w') as f:
-                    f.write('Just for date info!')
-                    f.close()
+                # returning file size to 'kB' version.
+                return int(os.path.getsize(filepath)) / 1000
 
             authorset = AuthorResource().export()
-            backupMixin(authorset, 'author')
+            fsizeAuthor = backupMixin(authorset, 'author')
 
             tagset = TagResource().export()
-            backupMixin(tagset, 'tag')
+            fsizeTag = backupMixin(tagset, 'tag')
 
             postset = PostResource().export()
-            backupMixin(postset, 'post')
+            fsizePost = backupMixin(postset, 'post')
 
             galleryset = GalleryResource().export()
-            backupMixin(galleryset, 'gallery')
+            fsizeGallery = backupMixin(galleryset, 'gallery')
 
             visitorset = VisitorResource().export()
-            backupMixin(visitorset, 'visitor')
+            fsizeVisitor = backupMixin(visitorset, 'visitor')
 
             pageset = PageResource().export()
-            backupMixin(pageset, 'page')
+            fsizePage = backupMixin(pageset, 'page')
 
-            self.stdout.write(self.style.SUCCESS('[+] Successfully backup blog!'))
+            def backupInfo():
+                return ''\
+                    '-------------------------------\n' \
+                    '| Last backup date: {0}\n' \
+                    '-------------------------------\n' \
+                    '| Author  : {1} kB\n' \
+                    '| Tag     : {2} kB\n' \
+                    '| Post    : {3} kB\n' \
+                    '| Gallery : {4} kB\n' \
+                    '| Visitor : {5} kB\n' \
+                    '| Page    : {6} kB\n' \
+                    '-------------------------------'.format(
+                        time.strftime("%d-%m-%Y"),
+                        fsizeAuthor, fsizeTag, fsizePost,
+                        fsizeGallery, fsizeGallery, fsizePage
+                    )
+
+            finfo = directory_backup + '/backupinfo.txt'
+            with open(finfo, 'w') as f:
+                f.write(backupInfo())
+                f.close()
+
+            self.stdout.write(
+                self.style.SUCCESS(
+                    backupInfo()
+                )
+            )
         else:
-            self.stdout.write(self.style.WARNING('[-] Can not backup blog!'))
+            self.stdout.write(
+                self.style.WARNING('[-] Can not backup blog!')
+            )
