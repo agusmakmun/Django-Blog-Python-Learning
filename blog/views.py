@@ -103,6 +103,10 @@ class DetailPostView(generic.DetailView):
             if request.user.is_anonymous() or \
                     request.user != obj.author.user:
                 return redirect('homepage')
+            else:
+                return super(DetailPostView, self).dispatch(
+                    request, *args, **kwargs
+                )
         elif request.GET.get('format') == 'json':
             get_cover = lambda obj: None if obj.cover == None \
                 or obj.cover == '' \
