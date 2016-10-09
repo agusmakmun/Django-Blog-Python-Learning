@@ -65,19 +65,7 @@ class Post(TimeStampedModel):
                               null=True,
                               blank=True,
                               help_text='Optional cover post')
-    description = RedactorField(
-        allow_file_upload=False,
-        redactor_options={
-            'lang': 'en',
-            'focus': 'true',
-            'buttons': [
-                'formatting', 'bold', 'italic',
-                'unorderedlist', 'orderedlist', 'outdent',
-                'indent', 'image', 'link', 'alignment',
-                'horizontalrule',
-            ]
-        }
-    )
+    description = RedactorField()
     tags = models.ManyToManyField('Tag')
     keywords = models.CharField(max_length=200, null=True, blank=True,
                                 help_text='Keywords sparate by comma.')
@@ -88,6 +76,10 @@ class Post(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse('detail_post_page', kwargs={'slug': self.slug})
+
+    @property
+    def total_visitors(self):
+        return Visitor.objects.filter(post__pk=self.pk).count()
 
     def __str__(self):
         return self.title
@@ -102,19 +94,7 @@ class Page(TimeStampedModel):
     author = models.ForeignKey(Author, related_name='author_page')
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
-    description = RedactorField(
-        allow_file_upload=False,
-        redactor_options={
-            'lang': 'en',
-            'focus': 'true',
-            'buttons': [
-                'formatting', 'bold', 'italic',
-                'unorderedlist', 'orderedlist', 'outdent',
-                'indent', 'image', 'link', 'alignment',
-                'horizontalrule',
-            ]
-        }
-    )
+    description = RedactorField()
     publish = models.BooleanField(default=True)
 
     def __str__(self):

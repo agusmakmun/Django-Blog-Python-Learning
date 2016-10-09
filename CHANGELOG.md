@@ -1,3 +1,14 @@
+### v.3.7
+* Added feature blog post json format: `<post_url>/?format=json`
+
+```
+curl -X GET \
+  -H "Accept: application/json" \
+  https://python.web.id/blog/django-redirect-http-to-https/?format=json
+```
+
+* Update for fixed draft post
+
 ### v.3.6
 * Added feature auto backup to the json file
 * Added feature highlight pre
@@ -7,12 +18,12 @@
 ### v.3.5
 * Implement Standard [PEP8](https://www.python.org/dev/peps/pep-0008/) for Python.
 * Implement CBV (Class Bassed View).
-* Migrated to [Python 3.5](https://docs.python.org/3/)
-* Migrated to [Django 1.10](https://docs.djangoproject.com/en/1.10/)
+* Migrated from Python 2.7 to [Python 3.5](https://docs.python.org/3/)
+* Migrated from Djagno 1.8 to [Django 1.10](https://docs.djangoproject.com/en/1.10/)
 * Migrated [Django wp-admin](https://github.com/barszczmm/django-wpadmin) to [Django suit](https://github.com/darklow/django-suit).
 * Migrated [Django Ckeditor](https://github.com/django-ckeditor/django-ckeditor) to [Django Redactor](https://github.com/douglasmiranda/django-wysiwyg-redactor).
 * Added [Django nocaptcha recaptcha](https://github.com/ImaginaryLandscape/django-nocaptcha-recaptcha) for contact form.
-* Added Page for tranding posts by visit.
+* Added Page for tranding posts by visitor.
 * Added Feature export and import using [Django Import Export](https://github.com/django-import-export/django-import-export)
 * Changed Gallery Upload to only once attachment field.
 * Added custom template for Error page, Maintenance mode, and much more...

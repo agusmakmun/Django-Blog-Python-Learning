@@ -6,7 +6,7 @@
 
   {% for object in object_list %}
     <div class="post">
-      <h2 class="title__bold"><a href="{% url 'detail_post_page' slug=object.slug %}">{{ object.title }}</a></h2>
+      <h2><a href="{% url 'detail_post_page' slug=object.slug %}">{{ object.title }}</a></h2>
       <p class="meta">
         By: <a href="{% url 'author_posts_page' username=object.author.user.username %}" style="text-transform:uppercase">{{ object.author }}</a> &#9679;
         at {{ object.created }} &#9679;
