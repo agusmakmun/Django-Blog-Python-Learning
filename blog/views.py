@@ -300,7 +300,7 @@ class TrendingPostsView(generic.ListView):
         now_year = time.strftime("%Y")
         now_month = time.strftime("%m")
         now_date = datetime.date.today()
-        start_week = now_date - datetime.timedelta(now_date.weekday())
+        start_week = now_date - datetime.timedelta(7)
         end_week = start_week + datetime.timedelta(7)
 
         if self.get_filter == 'week':
