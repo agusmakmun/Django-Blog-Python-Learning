@@ -1,10 +1,16 @@
 Django-Blog-Python-Learning
 -------
 
-Release Source Code of Django Blog Python Learning v.3.7
+Release Source Code of Django Blog Python Learning v.3.8
 
 ### Demo:
 - [https://python.web.id](https://python.web.id)
+
+### Technologies
+
+- Django 1.10
+- Python 3.5
+- Postgresql
 
 ### Features
 

@@ -1,3 +1,7 @@
+### v.3.8
+* Fixed trending posts by week.
+* Removed pkg-resources
+
 ### v.3.7
 * Added feature blog post json format: `<post_url>/?format=json`
 

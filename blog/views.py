@@ -292,7 +292,7 @@ class TrendingPostsView(generic.ListView):
             .values('post').annotate(visit=Count('post__id'))\
             .order_by('-visit')
 
-        list_pk_top_posts = [pk['post'] for pk in top_posts[:20]]  # Return 20 posts only
+        list_pk_top_posts = [pk['post'] for pk in top_posts]
         filter_posts = list(Post.objects.published().filter(pk__in=list_pk_top_posts))
         sorted_posts = sorted(filter_posts, key=lambda i: list_pk_top_posts.index(i.pk))
 
@@ -300,13 +300,13 @@ class TrendingPostsView(generic.ListView):
         now_year = time.strftime("%Y")
         now_month = time.strftime("%m")
         now_date = datetime.date.today()
-        start_week = now_date - datetime.timedelta(now_date.weekday())
+        start_week = now_date - datetime.timedelta(7)
         end_week = start_week + datetime.timedelta(7)
 
         if self.get_filter == 'week':
             filter_posts = list(Post.objects.published()
                                 .filter(pk__in=list_pk_top_posts)
-                                .filter(created__range=[start_week, end_week])
+                                .filter(created__date__range=[start_week, end_week])
                                 )
             sorted_posts = sorted(filter_posts, key=lambda i: list_pk_top_posts.index(i.pk))
 
@@ -328,7 +328,7 @@ class TrendingPostsView(generic.ListView):
         else:
             self.get_filter == 'global'
             sorted_posts = sorted_posts
-        return sorted_posts
+        return sorted_posts[:20]  # Return 20 posts only
 
     def get_context_data(self, **kwargs):
         context_data = super(TrendingPostsView, self).get_context_data(**kwargs)
