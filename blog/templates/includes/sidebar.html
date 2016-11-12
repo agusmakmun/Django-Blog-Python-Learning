@@ -1,0 +1,56 @@
+{% load disqus_tags %}
+{% load globaltags %}
+<div class="sidebar-module sidebar-module-inset">
+  <p>
+    <b>Python Learning</b><br/><br/>The best of science if it useful for many people ...<hr />
+    <center>Contribute this blog on github:</center><br />
+    <iframe src="https://ghbtns.com/github-btn.html?user=agusmakmun&repo=Django-Blog-Python-Learning&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+    <iframe src="https://ghbtns.com/github-btn.html?user=agusmakmun&repo=Django-Blog-Python-Learning&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+  </p>
+</div>
+
+<div class="sidebar-module sidebar-module-inset">
+	<button onclick="location.href='/join/'" type="button" class="btn btn-info btn-block cst__radius">
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Join Author
+  </button>
+	<button onclick="location.href='//python.web.id/media/files/Python_Learning.apk'" type="button" class="btn btn-success btn-block cst__radius">
+    <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Download APK
+  </buton>
+</div>
+
+<div class="sidebar-module sidebar-module-inset">
+  <div class="fb-page" data-href="https://www.facebook.com/PythonGeek/" data-small-header="true" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false">
+    <div class="fb-xfbml-parse-ignore">
+      <blockquote cite="https://www.facebook.com/PythonGeek/">
+        <a href="https://www.facebook.com/PythonGeek/">Python Geek</a>
+      </blockquote>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar-module sidebar-module-inset">
+  <h4>Recent Comments</h4>
+  {% disqus_recent_comments shortname 5 50 0 24 %}
+</div>
+
+<div class="sidebar-module sidebar-module-inset">
+  <h4>Recent Posts</h4>
+  {% recentposts as recentposts_list %}
+  {% for post in recentposts_list %}
+    <li><a href="{% url 'detail_post_page' slug=post.slug %}">{{ post.title }}</a></li>
+  {% empty %}
+    <p>No posts yet!</p>
+  {% endfor %}
+</div>
+
+<div class="sidebar-module sidebar-module-inset">
+  <h4>Entire Tags</h4>
+  {% populartags as populartags_list %}
+  {% for tag in populartags_list %}
+    <a class="btn btn-sm btn-block btn-default cst__radius cst__tags" href="{% url 'tag_posts_page' slug=tag.tag.slug %}">
+      {{ tag.tag.title }} <span class="badge pull-right">{{ tag.total }}</span>
+    </a>
+  {% empty %}
+    <p>No tags yet!</p>
+  {% endfor %}
+</div>

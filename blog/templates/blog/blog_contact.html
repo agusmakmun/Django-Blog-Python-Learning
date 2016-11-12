@@ -1,20 +1,30 @@
 {% extends "base.html" %}
-{% block title %}Contact - {{ block.super }} {% endblock %}
-{% block canonical_url %}{{ block.super }}/contact/{% endblock %}
-{% block blog_entries %}
-  <div class="post">
-    <h2>Contact</h2>
-    <p><center><span style="color: #f00">*) Please type again your email on body message.</span><br />
-    	{ If this form can not work, contact me at <a href="https://www.facebook.com/messages/agaust" target="_blank">Facebook Chat</a> }</center></p>
-      <form id="my_form" method="post">
-	    {% csrf_token %}
-	    {{ form }}
-	    <div class="form-actions">
-	      <button type="submit">Send</button>
-	    </div>
-	</form>
-  </div>
-{% endblock %}
+{% block title %}Contact - {{ block.super }}{% endblock %}
+{% block canonical_url %}https://{{ request.get_host }}{% url 'contact_page' %}{% endblock %}
 
-{% block widget_sidebar %}
+{% block content %}
+<div class="post">
+  <h2>Contact</h2>
+  {% if success %}
+    <meta http-equiv="refresh" content="7;url={% url 'homepage' %}" />
+    <p class="alert alert-success text-center cst__radius">{{ success }}</p>
+  {% else %}
+    <p><center><span style="color: #f00">*) Please type again your email on body message.</span><br />
+    { If this form can not work, contact me at <a href="https://www.facebook.com/messages/agaust" target="_blank">Facebook Chat</a> }</center></p>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <form action="." method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-actions">
+      <button class="btn btn-primary btn-block cst__radius" type="submit">Send</button>
+    </div>
+  </form>
+  {% endif %}
+</div>
+
+  {% if request.GET.subject %}
+  <script>
+    document.getElementById("id_subject").value = "{{ request.GET.subject }}";
+  </script>
+  {% endif %}
 {% endblock %}

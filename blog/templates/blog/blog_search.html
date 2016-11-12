@@ -1,51 +1,6 @@
-{% extends "base.html" %}
-{% block title %}You searched for: {{ query }} - {{ block.super }}{% endblock %}
-{% block canonical_url %}{{ block.super }}/result/?q={{ query }}{% endblock %}
-
-{% block blog_entries %}
-  <div class="post">
-    <p class="result-me">Result of :<i>"{{ query }}"</i></p>
-    {% if results %}
-      {% for object in results %}
-        <div class="post">
-          <h2><a href="{% url "entry_detail" slug=object.slug %}">{{ object.title }}</a></h2>
-          <p class="meta">
-            Date: {{ object.created }} - 
-            By: <a href="{% url 'author_page' pk=object.author.pk %}">{{ object.author }}</a> - 
-            Tagged under: 
-            {% for tag in obj.tags.all %}
-              <a href="{% url 'tag_page' tag_slug=tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-          </p>
-          {{ object.body|safe|striptags|truncatewords:"20"|linebreaks }}
-          <span style="float:right"><a href="{% url "entry_detail" slug=object.slug %}">Read More..</a></span>
-          <div style="clear:both;border-bottom: 1px solid #F2F2F2;margin: 10px 0"></div>
-        </div>
-      {% endfor %}
-    {% else %}
-      <p>No results. maybe you can search on <a href="/sitemap/">Sitemap</a></p>
-    {% endif %}
-  </div>
-<ul class="pagination">
-  <li {% if not results.has_previous %}class="disabled"{% endif %}>
-     <a {% if results.has_previous %}href="?q={{ query }}&amp;page={{ results.previous_page_number }}" aria-label="Previous" {% endif %}><span aria-hidden="true">&laquo;</span></a>
-   </li>
-   <li><a href="?q={{ query }}">First</a></li>
-  {% for linkpage in page_range %}
-      {% ifequal linkpage results.number %}
-         <li class="active">
-           <a href="#">{{ results.number }}<span class="sr-only">(current)</span></a>
-         </li>
-      {% else %}
-         <li><a href="?q={{ query }}&amp;page={{ linkpage }}">{{ linkpage }}</a></li>
-      {% endifequal %}
-  {% endfor %}
-  <li><a href="?q={{ query }}&amp;page={{ results.paginator.num_pages }}">Last</a></li>
-  <li {% if not results.has_next %}class="disabled"{% endif %}>
-     <a {% if results.has_next %}href="?q={{ query }}&amp;page={{ results.next_page_number }}" aria-label="Next" {% endif %}><span aria-hidden="true">&raquo;</span></a>
-   </li>
-</ul>
-{% endblock %}
-
-{% block widget_sidebar %}
+{% extends "blog/blog_home.html" %}
+{% block title %}Posts under query {{ query }} - {{ block.super }}{% endblock %}
+{% block canonical_url %}https://{{ request.get_host }}{% url 'search_posts_page' %}{% endblock %}
+{% block message_info_homepage %}
+  <p class="message__info">Post under query: <i>"{{ query }}"</i></p>
 {% endblock %}

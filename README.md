@@ -1,22 +1,99 @@
-# Django-Blog-Python-Learning
+Django-Blog-Python-Learning
+-------
 
-Release Source Code of Django Blog Python Learning v.3.0
+Release Source Code of Django Blog Python Learning v.3.7
 
-```
-Name             : Django Blog Python Learning
-Created By       : Agus Makmun (Summon Agus)
-Blog             : bloggersmart.net - python.web.id
-License          : GNU GENERAL PUBLIC LICENSE Version 2, June 1991
-Repository       : https://github.com/agusmakmun/Django-Blog-Python-Learning
-Modified from    : https://github.com/arocks/qblog - Django 1.7 - Arun Ravindran
-```
-
-> This repository modified from old project of django blog at https://github.com/arocks/qblog with Django 1.7. Thanks so much for it. and in this `Django Blog Python Learning v.3.0` gets big changes with much feature added.
-
-###  Demo:
+### Demo:
 - [https://python.web.id](https://python.web.id)
 
-###  Update and Commits
+### Features
+
+- Django Suit
+- Django Wysiwyg Redactor
+- Django disqus for comments.
+- Face 90% bootstrap.
+- Admin Site: User, Post, Page, Author, Tag & Gallery.
+- Pagination posts, Sitemap page, Search posts page, Display posts under tags, Display posts under Author.
+- Related posts
+- Next and previous for post.
+- sitemap.xml, feed
+- Contact form.
+- About author in the botom of posts.
+- Visitor Counter
+- Auto backup to the json file
+- Json post view
+- much more...
+
+### Instalation
+
+I assume you already setup your django development with virtual enviroment (virtualenv).
+
+**1. Create virtual enviroment and activate it.**
+
+```
+$ virtualenv --python=/usr/bin/python3 yourenv
+$ source bin/activate
+```
+
+**2. Cloning this project**
+
+```
+$ git clone git@github.com:agusmakmun/Django-Blog-Python-Learning.git
+```
+
+**3. Install all requirements**
+
+> If you getting an error, `error: command 'i686-linux-gnu-gcc' failed with exit status 1`
+> please install first the python3-dev
+> using command `sudo apt-get install python3-dev` for all-deb, or use different method.
+> This probelm specialy for `pip3 install psycopg2`.
+> For more, please checkout this answer: http://stackoverflow.com/a/11094752/6396981
+
+```
+$ pip install -r requirements.txt
+```
+
+**4. Database migrations**
+
+```
+$ ./manage.py makemigrations
+$ ./manage.py migrate
+```
+
+**5. Run the server**
+
+```
+$ ./manage.py runserver
+```
+-------
+
+### Screenshot:
+
+#### Homepage
+
+![Homepage](__screenshot/1_homepage.png  "Homepage")
+
+#### Detail Post
+
+![Detail Post](__screenshot/2_detail_post.png  "Detail Post")
+
+#### Admin Dashboard _(using django suit)_
+
+![Admin Dashboard](__screenshot/3_admin.png  "Admin Dashboard")
+
+#### All Posts on the Admin Dashboard & _Included Django Import Export_
+
+![All Posts on the Admin Dashboard & Included Django Import Export](__screenshot/4_admin_posts.png  "All Posts on the Admin Dashboard & Included Django Import Export")
+
+#### Tags Filter and Redactor Editor
+
+![Tags Filter and Redactor Editor](__screenshot/5_admin_post_editor.png  "Tags Filter and Redactor Editor")
+
+#### Gallery File & Images
+
+![Gallery](__screenshot/6_admin_gallery.png  "Gallery")
+
+### Update and Commits
 
 - https://github.com/agusmakmun/Django-Blog-Python-Learning/commits/master
 
@@ -25,87 +102,12 @@ Modified from    : https://github.com/arocks/qblog - Django 1.7 - Arun Ravindran
 - https://python.web.id/tag/django/
 - https://github.com/agusmakmun/Some-Examples-of-Simple-Python-Script/tree/master/Django
 
-###  Features
-
-- django-wpadmin
-- django-ckeditor
-- django disqus for comments.
-- face 90% bootstrap.
-- admin site, user, post, page, author, tags & gallery dan files.
-- pagination posts, sitemap page, results query, display posts under tags.
-- related posts
-- read more posts
-- next and previous for post.
-- show all posts under tags.
-- sitemap.xml, feed, sitemap page.
-- contact form.
-- search box, used for { body, title, and keywords }
-- widget all tags, recent comments & recent posts.
-- about author in the botom of posts.
-- print page
-- show ip visitor
-- display article under author.
-- much more...
 
 ### ChangeLog
 
-* https://github.com/agusmakmun/Django-Blog-Python-Learning/blob/master/CHANGELOG.md
+* [CHANGELOG](CHANGELOG.md)
 
-### Prequirements:
 
-```
-Django==1.8.5
-Pillow==3.0.0
-django-ckeditor==5.0.2
-django-disqus==0.5
-django-wpadmin==1.7.4
-funcsigs==0.4
-mock==1.3.0
-pbr==1.8.0
-postgres==2.2.0
-psycopg2==2.6.1
-six==1.9.0
-wsgiref==0.1.2
-```
+### License
 
-### Screenshot:
-
-#### Homepage
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/homepage.png"/>
-
-#### Post Detail
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/post.png"/>
-
-#### Related Post, Author, Next & Previous Post, and Disqus Comments 
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/related%20post%2C%20author%20and%20disqus%20comment.png"/>
-
-#### Search Post under Query
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/search%20query.png"/>
-
-#### Sitemap Page
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/sitemap%20page.png"/>
-
-#### Contact Form
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/contact%20form.png">
-
-#### Admin Dashboard <i>(using django-wpadmin)</i>
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/admin%20dashboard.png">
-
-#### All Posts in Admin
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/admin%20blog%20entry.png">
-
-#### Tags Filter and Ckeditor
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/admin%20tags%20filter%20and%20ckeditor.png">
-
-#### All Gallery images and file
-
-<img src="https://raw.githubusercontent.com/agusmakmun/Django-Blog-Python-Learning/master/__screenshot/admin%20gallery%20and%20files.png">
+* [GPL-2.0](LICENSE)

@@ -1,6 +1,22 @@
 from django import forms
+from nocaptcha_recaptcha.fields import NoReCaptchaField
+
 
 class ContactForm(forms.Form):
-    from_email = forms.EmailField(required=True)
-    subject = forms.CharField(required=True)
-    message = forms.CharField(widget=forms.Textarea)
+    cst = {
+        'class': 'form-control cst__radius',
+        'required': 'required'
+    }
+    email = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(attrs=cst)
+    )
+    subject = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs=cst)
+    )
+    message = forms.CharField(
+        required=True,
+        widget=forms.Textarea(attrs=cst)
+    )
+    captcha = NoReCaptchaField()

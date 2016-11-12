@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Trending - {{ block.super }} {% endblock %}
+{% block canonical_url %}{{ block.super }}/trending/{% endblock %}
+
+{% block content %}
+  <div class="input-group sort__choices">
+    <span class="input-group-addon" id="basic-addon3">
+      <span class="glyphicon glyphicon-cog"></span>&nbsp; Choice Filter Posts
+    </span>
+    <select id="filter__trending__posts" onchange="location='?filter='+this.options[this.selectedIndex].value;" class="form-control" data-live-search="true" name="filter">
+      <option value="global">GLobal</option>
+      <option value="week">This Week</option>
+      <option value="month">This Month</option>
+      <option value="year">This Year</option>
+  </select>
+  <script>
+    //force attribute selected for value from filter.
+    $('#filter__trending__posts option[value={{ filter }}]').prop('selected', true);
+  </script>
+  </div><!-- /.input-group -->
+  <hr />
+
+  {% for object in object_list %}
+    <div class="post">
+      <h2 class="title__bold"><a href="{% url 'detail_post_page' slug=object.slug %}">{{ object.title }}</a></h2>
+      <p class="meta">
+        Created: {{ object.created }} -
+        By: <a href="{% url 'author_posts_page' username=object.author.user.username %}">{{ object.author }}</a> -
+        Tagged under:
+        {% for tag in object.tags.all %}
+          <a href="{% url 'tag_posts_page' slug=tag.slug %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+        {% empty %}Uncategories
+        {% endfor %}
+      </p>
+      {% if object.cover %}
+        <div class="cst__cover__posts">
+          <a href="{% url 'detail_post_page' slug=object.slug %}">
+            <img style="width:100%" src="/media/{{ object.cover }}" alt="{{ object.title }}">
+          </a>
+        </div>
+      {% endif %}
+      {{ object.description|safe|striptags|truncatewords:"50"|linebreaks }}
+      <span style="margin-bottom: .5em;float:right">
+        <a href="{% url 'detail_post_page' slug=object.slug %}">Read More &rarr;</a>
+      </span>
+      <div style="clear:both;border-bottom: 1px solid #F2F2F2;margin: 10px 0"></div>
+    </div>
+  {% empty %}
+    <p class="alert alert-warning text-center cst__radus"><span class="glyphicon glyphicon-info-sign"></span> Posts does not exist!</p>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}{{ object.title }} - {{ block.super }}{% endblock %}
+{% block canonical_url %}https://{{ request.get_host }}{% url 'detail_post_page' slug=object.slug %}{% endblock %}
+
+{% block meta_seo %}
+  <meta name="description" content="{% if object.meta_description %}{{ object.meta_description }}{% else %}{{ object.description|safe|striptags|truncatewords:"20" }}{% endif %}">
+  <meta name="author" content="{{ object.author }}">
+  <meta name="keywords" content="{% if object.keywords %}{{ object.keywords }}{% else %}{{ object.title }}{% endif %}"/>
+  {% for tag in object.tags.all %}
+  <meta property="article:tag" content="{{ tag.title }}" />
+  {% endfor %}
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{ object.title }}"/>
+  <meta property="og:description" content="{% if object.meta_description %}{{ object.meta_description }}{% else %}{{ object.description|safe|striptags|truncatewords:"20" }}{% endif %}"/>
+  <meta property="og:url" content="https://{{ request.get_host }}{% url 'detail_post_page' slug=object.slug %}"/>
+  {% if object.cover %}
+  <meta property="og:image" content="https://{{ request.get_host }}/media/{{ object.cover }}"/>
+  {% endif %}
+  <meta property="og:site_name" content="python.web.id" />
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:description" content="{% if object.meta_description %}{{ object.meta_description }}{% else %}{{ object.description|safe|striptags|truncatewords:"20" }}{% endif %}"/>
+  {% if object.cover %}
+  <meta name="twitter:image:src" content="https://{{ request.get_host }}/media/{{ object.cover }}"/>
+  {% endif %}
+  <meta name="twitter:title" content="{{ object.title }}"/>
+  <meta name="twitter:domain" content="python.web.id"/>
+  <meta name="twitter:creator" content="@agusmakmun6"/>
+{% endblock %}
+
+{% block content %}
+  <div class="post" id="printable">
+    <h2><a href="{% url "detail_post_page" slug=object.slug %}">{{ object.title }}</a>{% if object.publish == False %} <i class="badge">DRAF</i>{% endif %}</h2>
+    <div class="meta">
+      By: <a href="{% url 'author_posts_page' username=object.author.user.username %}" style="text-transform:uppercase">{{ object.author }}</a> &#9679;
+      at {{ object.created }} &#9679; and modified at {{ object.modified }}<br />
+      Posted under:
+      {% for tag in object.tags.all %}
+        <a href="{% url 'tag_posts_page' slug=tag.slug %}">#{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+      {% empty %}Uncategories
+      {% endfor %}
+      <br />
+      Your ip address: {{ get_client_ip }} &#9679; views: {{ visitor_counter }} times.
+    </div>
+
+    <p>
+    {% if object.cover %}
+    <caption align="bottom">
+      <img style="width:100%" class="cover-post" src="//{{ request.get_host }}/media/{{ object.cover }}" title="{{ object.title }}" alt="{{ object.title }}"/>
+    <span style="margin-left: 1px;background: #F2F4F3; padding: 0 5px; text-shadow: 1px 1px 1px #fff;">{{ object.title }}</span>
+    </caption>
+    {% endif %}
+    </p>
+    {{ object.description|safe }}
+
+    <div class="share panel-body" id="non-printable">
+      <span>Share on: </span>
+      <a class="btn btn-sm btn-primary cst__radius" href="https://www.facebook.com/sharer/sharer.php?u=https://python.web.id{% url "detail_post_page" slug=object.slug %}" target="_blank">Facebook</a>
+      <a class="btn btn-sm btn-danger cst__radius" href="https://plus.google.com/share?url=https://python.web.id{% url "detail_post_page" slug=object.slug %}" target="_blank">Google+</a>
+      <a class="btn btn-sm btn-info cst__radius" href="https://twitter.com/share" target="_blank">Twitter</a>
+      <a class="btn btn-sm btn-success cst__radius" href="javascript:window.print()">Print Page</a>
+    </div>
+
+    <style type="text/css" media="print">
+     @media print {
+       #non-printable, .ip-client { display: none; }
+       #printable { display: block; width: 100%;height: 100%;}
+       a[href]::after {content: "";} /*content: " (" attr(href) ")"*/
+     }
+    </style>
+
+    <div class="panel panel-default" id="non-printable">
+    <div class="panel-heading">Author</div>
+      <div class="panel-body">
+        <div class="media">
+          <div class="media-left media-middle" style="float: left;margin-right: 10px;">
+            <a href="{% url 'author_posts_page' username=object.author.user.username %}">
+              <img class="media-object" alt="{{ object.author }}" title="{{ object.author }}" src="{% if object.author.avatar %}/media/{{ object.author.avatar }}{% else %}/static/assets/icons/avatar.jpeg{% endif %}" style="width: 64px; height: 64px;">
+            </a>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">{{ object.author }}</h4>
+            {{ object.author.about|safe }}<br />
+              Website: <a href="{{ object.author.website }}" target="_blank">{{ object.author.website }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default related" id="non-printable">
+      <div class="panel-heading">
+        <h3 class="panel-title">Related Posts</h3>
+      </div>
+        <ul class="list-group">
+          {% for post in related_posts %}
+            <li class="list-group-item"><a href="{% url "detail_post_page" slug=post.slug %}">{{ post.title }}</a> - <i>{{ post.created }}</i></li>
+            {% empty %}
+              <p style="margin: 1em;">No related posts!</p>
+          {% endfor %}
+        </ul>
+    </div>
+
+    <ul class="pager" id="non-printable">
+      <li class="previous">
+      {% if object.get_previous_by_created %}
+        <a href="{% url 'detail_post_page' slug=object.get_previous_by_created.slug %}">&larr; Previous</a>
+      {% endif %}
+      </li>
+      <li class="next">
+      {% if object.get_next_by_created %}
+        <a href="{% url 'detail_post_page' slug=object.get_next_by_created.slug %}">Next &rarr;</a>
+      {% endif %}
+      </li>
+    </ul>
+
+    {% load disqus_tags %}
+    {% set_disqus_identifier "blogpost_" object.title %}
+    {% set_disqus_title object.title %}
+    {% disqus_show_comments %}
+    <!-- disqus_dev -->
+  </div>
+
+  <link rel="stylesheet" href="{% static 'assets/css/highlight.css' %}">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.5.0/highlight.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('pre').each(function(i, block) {
+        hljs.highlightBlock(block);
+      });
+    });
+  </script>
+{% endblock %}

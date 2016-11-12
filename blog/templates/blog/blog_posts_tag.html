@@ -1,0 +1,6 @@
+{% extends "blog/blog_home.html" %}
+{% block title %}Posts under tag {{ tag }} - {{ block.super }}{% endblock %}
+{% block canonical_url %}https://{{ request.get_host }}{% url 'tag_posts_page' slug=tag.slug %}{% endblock %}
+{% block message_info_homepage %}
+  <p class="message__info">Post under tag: <i>"{{ tag }}"</i></p>
+{% endblock %}

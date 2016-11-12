@@ -1,0 +1,172 @@
+@import 'https://fonts.googleapis.com/css?family=Raleway';
+body {
+  font-size: 13px;
+  font-family: 'Raleway', sans-serif;
+}
+a {
+  -webkit-transition: color .15s cubic-bezier(.33,.66,.66,1);
+  transition: color .15s cubic-bezier(.33,.66,.66,1);
+}
+pre {
+  font-family: monospace;
+  font-size: 12px;
+}
+img, iframe {
+  max-width: 100%;
+}
+h2 {
+  font-size: 20px;
+}
+img.cover-post {
+    margin: 1px;
+    border: 1px solid #ddd;
+    padding: 2px;
+}
+.post ul {
+  color: #555;
+}
+.message__info {
+  background-color: #F5F5F5;
+  padding: 10px;
+  border: 1px solid #EFECEC;
+  margin-bottom: 2em;
+  text-align: center;
+}
+.btn {
+  border: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.btn-primary {
+  background-color: #337ab7;
+}
+.btn-info {
+  background-color: #33A4B7;
+}
+.btn-warning {
+  background-color: #f0AD4E;
+}
+.btn-success {
+  background-color: #33B757;
+}
+.btn-danger {
+  background-color: #B73333;
+}
+.title__bold {
+  font-weight: bold;
+}
+.cst__radius {
+  border-radius: 2px;
+}
+.cst__btn__search__outline {
+  border: 1px solid #ccc;
+}
+.cst__tags {
+  margin-bottom: .5em;
+  text-align: left;
+}
+.cst__cover__posts {
+  margin-bottom: 1em;
+  max-height: 200px;
+  overflow: hidden;
+}
+.main__container {
+  margin-top: 8em;
+}
+.sitemap ul li {
+  background: #FAFAFA;
+  border-bottom: 1px solid #f0f0f0;
+  border-top: 1px solid #fff;
+  padding: 2px;
+  padding-left: 5px;
+  list-style: decimal;
+}
+.post__info {
+  color: #999;
+}
+.author__avatar {
+  border-radius: 50%
+}
+.sitemap ul li:nth-child(odd) {
+  background: #FFF;
+}
+.input-group-addon {
+  font-size: 12px;
+  border: none;
+  color: #fff;
+  border-radius: 3px;
+  text-transform: uppercase;
+  background-color: #33A4B7;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+#filter__trending__posts {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: none;
+}
+/*
+Code snippet by maridlcrmn for Bootsnipp.com
+Follow me on Twitter @maridlcrmn
+*/
+
+.navbar-brand { position: relative; z-index: 2; }
+
+.navbar-nav.navbar-right .btn { position: relative; z-index: 2; padding: 4px 20px; margin: 10px auto; transition: transform 0.3s; }
+
+.navbar .navbar-collapse { position: relative; overflow: hidden !important; }
+.navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 22px; }
+
+.navbar .nav-collapse { position: absolute; z-index: 1; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding-right: 120px; padding-left: 80px; width: 100%; }
+.navbar.navbar-default .nav-collapse { background-color: #f8f8f8; }
+.navbar.navbar-inverse .nav-collapse { background-color: #222; }
+.navbar .nav-collapse .navbar-form { border-width: 0; box-shadow: none; }
+.nav-collapse>li { float: right; }
+
+.btn.btn-circle { border-radius: 50px; }
+.btn.btn-outline { background-color: transparent; }
+
+.navbar-nav.navbar-right .btn:not(.collapsed) {
+    background-color: rgb(111, 84, 153);
+    border-color: rgb(111, 84, 153);
+    color: rgb(255, 255, 255);
+}
+
+.navbar.navbar-default .nav-collapse,
+.navbar.navbar-inverse .nav-collapse {
+    height: auto !important;
+    transition: transform 0.3s;
+    transform: translate(0px,-50px);
+}
+.navbar.navbar-default .nav-collapse.in,
+.navbar.navbar-inverse .nav-collapse.in {
+    transform: translate(0px,0px);
+}
+
+@media screen and (min-width: 768px) {
+    .navbar-right {
+       margin-right: auto;
+    }
+}
+@media screen and (max-width: 767px) {
+    .navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 15px; padding-right: 15px; }
+
+    .navbar .nav-collapse { margin: 7.5px auto; padding: 0; }
+    .navbar .nav-collapse .navbar-form { margin: 0; }
+    .nav-collapse>li { float: none; }
+
+    .navbar.navbar-default .nav-collapse,
+    .navbar.navbar-inverse .nav-collapse {
+        transform: translate(-100%,0px);
+    }
+    .navbar.navbar-default .nav-collapse.in,
+    .navbar.navbar-inverse .nav-collapse.in {
+        transform: translate(0px,0px);
+    }
+
+    .navbar.navbar-default .nav-collapse.slide-down,
+    .navbar.navbar-inverse .nav-collapse.slide-down {
+        transform: translate(0px,-100%);
+    }
+    .navbar.navbar-default .nav-collapse.in.slide-down,
+    .navbar.navbar-inverse .nav-collapse.in.slide-down {
+        transform: translate(0px,0px);
+    }
+}

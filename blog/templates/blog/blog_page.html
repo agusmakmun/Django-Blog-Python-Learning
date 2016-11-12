@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }} - {{ block.super }}{% endblock %}
+{% block canonical_url %}https://{{ request.get_host }}{% url 'detail_page' slug=object.slug %}{% endblock %}
+
+{% block meta_seo %}
+  <meta name="description" content="{{ object.description|safe|striptags|truncatewords:"20" }}">
+  <meta name="author" content="{{ object.author }}">
+  <meta name="keywords" content="{{ object.title }}"/>
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{ object.title }}"/>
+  <meta property="og:description" content="{{ object.description|safe|striptags|truncatewords:"20" }}"/>
+  <meta property="og:url" content="https://{{ request.get_host }}{% url 'detail_page' slug=object.slug %}"/>
+  <meta property="og:site_name" content="python.web.id" />
+  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:description" content="{{ object.description|safe|striptags|truncatewords:"20" }}"/>
+  <meta name="twitter:title" content="{{ object.title }}"/>
+  <meta name="twitter:domain" content="python.web.id"/>
+  <meta name="twitter:creator" content="@agusmakmun6"/>
+{% endblock %}
+
+{% block content %}
+  <div class="post post__page" id="printable">
+    <h2><a href="{% url "detail_page" slug=object.slug %}">{{ object.title }}</a></h2>
+    <p class="meta">
+      Created: {{ object.created }} - Modified: {{ object.modified }} - 
+      By: <a href="{% url 'author_posts_page' username=object.author.user.username %}">{{ object.author }}</a>
+    </p>
+    {{ object.description|safe }}
+  </div>
+{% endblock %}
