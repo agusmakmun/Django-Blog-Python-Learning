@@ -92,7 +92,7 @@ class Command(BaseCommand):
                     '-------------------------------'.format(
                         time.strftime("%d-%m-%Y"),
                         fsizeAuthor, fsizeTag, fsizePost,
-                        fsizeGallery, fsizeGallery, fsizePage
+                        fsizeGallery, fsizeVisitor, fsizePage
                     )
 
             finfo = directory_backup + '/backupinfo.txt'
